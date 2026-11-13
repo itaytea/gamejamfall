@@ -1,20 +1,35 @@
 [gd_scene format=3 uid="uid://btp0ixsw5y4pf"]
 
-[ext_resource type="Texture2D" uid="uid://dlhxmum4smaf" path="res://Sprites/icon.jpg" id="1_lc1oi"]
+[ext_resource type="Script" uid="uid://45kohodrbmhq" path="res://Scripts/player.gd" id="1_8od7v"]
+[ext_resource type="Texture2D" uid="uid://d2qotwwv8jht3" path="res://icon.svg" id="2_qc4db"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4wwxg"]
-size = Vector2(136, 134)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6onfq"]
+size = Vector2(128, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5oalh"]
+size = Vector2(128, 128)
 
 [node name="Node2D" type="Node2D" unique_id=1985622800]
 
-[node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=775156430]
-position = Vector2(534, 199)
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1052130445]
+position = Vector2(-8, -10)
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="RigidBody2D" unique_id=1589673208]
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=879684159]
+position = Vector2(-8, 249)
+scale = Vector2(9.08, 0.9966674)
 
-[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D/CharacterBody2D" unique_id=875881834]
-scale = Vector2(0.3, 0.3)
-texture = ExtResource("1_lc1oi")
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=1388817881]
+texture = ExtResource("2_qc4db")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D/CharacterBody2D" unique_id=826792575]
-shape = SubResource("RectangleShape2D_4wwxg")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1604758318]
+shape = SubResource("RectangleShape2D_6onfq")
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=1410585149]
+position = Vector2(-8, -10)
+script = ExtResource("1_8od7v")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=2119333423]
+texture = ExtResource("2_qc4db")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=166544698]
+shape = SubResource("RectangleShape2D_5oalh")
