@@ -10,11 +10,6 @@ enum Task { IDLE, GUARD, GARDENER, FORAGER }
 #possible names: waiting on sam to make list
 const NAMES := ["Itay", "Darinah", "Sam", "Keira", "Cameron", "Joan", "Iwa", "August", "Kier", "Harini", "Breanna", "Kailey", "Audrey", "Claire", "Jared"]
 
-# Move to balance.gd in the future
-const DISEASE_DAYS := 3
-const FORAGE_DAYS := 2
-const PORTRAIT_COUNT := 6
-
 # -- resident specific values --
 
 #identity
