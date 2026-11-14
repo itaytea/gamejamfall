@@ -15,7 +15,7 @@ const NAMES := ["Itay", "Darinah", "Sam", "Keira", "Cameron", "Joan", "Iwa", "Au
 #identity
 var name : String
 var portrait_id: int #for now, if drinah decides to have a randomized system itll be different
-
+var dialogue_id: int
 #sickness - hidden variables
 var is_infected := false
 var days_until_death:= -1 #-1 if healthy
@@ -34,6 +34,7 @@ var forage_days_left := 0
 static func random(infect_chance: float) -> Resident:
 	var r := Resident.new()
 	r.name = NAMES.pick_random()
+	r.dialogue_id = randi() % Balance.DIALOGUE_SET_COUNT
 	r.portrait_id = randi() % Balance.PORTRAIT_COUNT
 	if randf() < infect_chance:
 		r.is_infected = true

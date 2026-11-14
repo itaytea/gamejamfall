@@ -1,9 +1,11 @@
 class_name Balance
 extends RefCounted
 
+const PORTRAIT_COUNT := 1
+const DIALOGUE_SET_COUNT := 1
+
 const DISEASE_DAYS := 3
 const FORAGE_DAYS := 2
-const PORTRAIT_COUNT := 6
 const GARDEN_YIELD := 4
 const POOR_HARVEST_YIELD := 3
 const FORAGE_MIN := 9
