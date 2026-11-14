@@ -4,7 +4,7 @@ extends RefCounted
 #-- general values --
 
 #status on farm
-enum Status {UNKOWN, POSITIVE, NEGATIVE}
+enum Status {UNKNOWN, POSITIVE, NEGATIVE}
 enum Task { IDLE, GUARD, GARDENER, FORAGER }
 
 #possible names: waiting on sam to make list
@@ -22,7 +22,7 @@ var days_until_death:= -1 #-1 if healthy
 var is_dead := false
 
 #sickness - known variables
-var known_status: Status = Status.UNKOWN
+var known_status: Status = Status.UNKNOWN
 
 #farm status
 var days_on_farm := 0
@@ -62,7 +62,7 @@ func tick_disease() -> bool:
 	return false
 
 #reveals pos or neg upon a test, script calling should spend the meal
-func run_test(current_day: int) -> void:
+func run_test() -> void:
 	known_status = Status.POSITIVE if is_infected else Status.NEGATIVE
 
 # -- Tasks --
@@ -100,7 +100,7 @@ func status_text(current_day: int = -1) -> String:
 		Status.NEGATIVE:
 			return "Clear"
 		_:
-			return "Unkown"
+			return "Unkmown"
 
 func task_text() -> String:
 	if is_away:
