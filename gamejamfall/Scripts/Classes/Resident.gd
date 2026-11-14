@@ -34,11 +34,11 @@ var forage_days_left := 0
 static func random(infect_chance: float) -> Resident:
 	var r := Resident.new()
 	r.name = NAMES.pick_random()
-	r.portrait_id = randi() % PORTRAIT_COUNT
+	r.portrait_id = randi() % Balance.PORTRAIT_COUNT
 	if randf() < infect_chance:
 		r.is_infected = true
 		#has a chance to be a few days into the infection already
-		r.days_until_death = randi_range(1, DISEASE_DAYS) 
+		r.days_until_death = randi_range(1, Balance.DISEASE_DAYS) 
 	return r
 
 # -- Disease functions --
@@ -48,7 +48,7 @@ func infect() -> void:
 	if is_infected or is_dead:
 		return
 	is_infected = true
-	days_until_death = DISEASE_DAYS
+	days_until_death = Balance.DISEASE_DAYS
 
 #checks if person dies, called once a night
 func tick_disease() -> bool:
@@ -77,7 +77,7 @@ func set_task(new_task: Task) -> void:
 	task = new_task
 	if new_task ==Task.FORAGER:
 		is_away = true
-		forage_days_left = FORAGE_DAYS
+		forage_days_left = Balance.FORAGE_DAYS
 		
 #call at night for anyone away. GameState wil later check is_dead:
 func tick_forage() -> bool:
