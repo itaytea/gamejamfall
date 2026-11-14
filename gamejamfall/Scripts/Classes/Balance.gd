@@ -2,7 +2,7 @@ class_name Balance
 extends RefCounted
 
 const PORTRAIT_COUNT := 1
-const DIALOGUE_SET_COUNT := 1
+const DIALOGUE_SET_COUNT := 3
 
 const DISEASE_DAYS := 3
 const FORAGE_DAYS := 2

@@ -1,0 +1,51 @@
+# Each visitor has the same three cues: v<id>_greet, v<id>_tested, v<id>_rejected.
+# all three cues come from the same personality.
+# Add v3_..., v4_... sets and raise Balance.DIALOGUE_SET_COUNT to match.
+# Keep each line under ~100 characters, split longer speeches into several lines.
+
+#-- v0
+
+~ v0_greet
+{{name}}: I wandered aimlessly trying to find some form of shelter.
+{{name}}: Will you please let me stay? I have nowhere else to go, and… well…
+{{name}}: I will help you as best I can.
+=> END
+
+~ v0_tested
+{{name}}: Well, if you insist…
+=> END
+
+~ v0_rejected
+{{name}}: How could you do this to someone?
+=> END
+
+#-- v1
+
+~ v1_greet
+{{name}}: Everyone is dead. Everyone is dead! Hahahaha.
+{{name}}: Will you let me in? Nowhere left to go.
+=> END
+
+~ v1_tested
+{{name}}: Guaaah do what you must
+=> END
+
+~ v1_rejected
+{{name}}: Bye-bye!!
+=> END
+
+#-- v0
+
+~ v2_greet
+{{name}}: Rumor has been spreading of a safe location in this area…
+{{name}}: Would you please let me stop by here for a moment?
+{{name}}: It’s been forever since I’ve had a day of rest. I promise you I won’t stay for long.
+=> END
+
+~ v2_tested
+{{name}}: If that’s what it takes
+=> END
+
+~ v2_rejected
+{{name}}: I understand, I wish you the best of luck
+=> END

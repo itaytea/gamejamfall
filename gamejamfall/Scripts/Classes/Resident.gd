@@ -100,7 +100,7 @@ func status_text(current_day: int = -1) -> String:
 		Status.NEGATIVE:
 			return "Clear"
 		_:
-			return "Unkmown"
+			return "Unknown"
 
 func task_text() -> String:
 	if is_away:

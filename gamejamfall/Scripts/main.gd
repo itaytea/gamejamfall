@@ -6,7 +6,7 @@ extends Control
 @onready var holder: Control = $StageHolder
 
 var _scenes := {
-	GameState.Stage.ADMISSION: preload("res://Scenes/Placeholders/admission_placeholder.tscn"),
+	GameState.Stage.ADMISSION: preload("res://Scenes/Admission.tscn"),
 	GameState.Stage.COMMAND: preload("res://Scenes/Placeholders/command_placeholder.tscn"),
 	GameState.Stage.CONSEQUENCES: preload("res://Scenes/Placeholders/consequences_placeholder.tscn"),
 }
