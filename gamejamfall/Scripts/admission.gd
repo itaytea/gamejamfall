@@ -8,6 +8,7 @@ const VISITOR_DIALOGUE: DialogueResource = preload("res://Dialogue/visitors.dial
 const COLOR_UNKNOWN := Color(0.35, 0.32, 0.30)
 const COLOR_CLEAR := Color(0.18, 0.42, 0.22)
 const COLOR_INFECTED := Color(0.62, 0.16, 0.14)
+const COLOR_INCONCLUSIVE := Color(0.62, 0.45, 0.10)
 
 @onready var _visitor_name: Label = $InfoBox/VisitorName
 @onready var _status: Label = $InfoBox/Status
@@ -64,7 +65,7 @@ func _on_deny() -> void:
 
 
 func _refresh() -> void:
-	var waiting := GameState.visitors.size() - 1
+	var waiting: int = GameState.visitors.size() - 1
 	_stats.text = "DAY %d\nFOOD %d\n%d/%d\n%s" % [
 		GameState.day, GameState.meals, GameState.residents.size(), Balance.MAX_RESIDENTS,
 		"+%d" % waiting if waiting > 0 else ""]
@@ -74,6 +75,7 @@ func _refresh() -> void:
 	match _visitor.known_status:
 		Resident.Status.POSITIVE: _status.add_theme_color_override("font_color", COLOR_INFECTED)
 		Resident.Status.NEGATIVE: _status.add_theme_color_override("font_color", COLOR_CLEAR)
+		Resident.Status.INCONCLUSIVE: _status.add_theme_color_override("font_color", COLOR_INCONCLUSIVE)
 		_: _status.add_theme_color_override("font_color", COLOR_UNKNOWN)
 
 	_test_button.disabled = _busy or not GameState.can_test(_visitor)

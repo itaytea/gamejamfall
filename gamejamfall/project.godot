@@ -26,12 +26,16 @@ window/size/viewport_width=240
 window/size/viewport_height=135
 window/size/window_width_override=960
 window/size/window_height_override=540
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
 window/stretch/scale_mode="integer"
 
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")
+
+[gui]
+
+theme/custom_font="uid://cnxl5kaveci5n"
 
 [input]
 

@@ -4,7 +4,7 @@ extends RefCounted
 #-- general values --
 
 #status on farm
-enum Status {UNKNOWN, POSITIVE, NEGATIVE}
+enum Status {UNKNOWN, INCONCLUSIVE, POSITIVE, NEGATIVE}
 enum Task { IDLE, GUARD, GARDENER, FORAGER }
 
 #possible names: waiting on sam to make list
@@ -62,8 +62,20 @@ func tick_disease() -> bool:
 	return false
 
 #reveals pos or neg upon a test, script calling should spend the meal
+#can fail (TEST_FAIL_CHANCE) and come back inconclusive; the player may test again
+#an infected person can also wrongly test Clear (TEST_FALSE_NEGATIVE_CHANCE); the player isn't told
 func run_test() -> void:
-	known_status = Status.POSITIVE if is_infected else Status.NEGATIVE
+	if randf() < Balance.TEST_FAIL_CHANCE:
+		known_status = Status.INCONCLUSIVE
+		return
+	if is_infected and randf() >= Balance.TEST_FALSE_NEGATIVE_CHANCE:
+		known_status = Status.POSITIVE
+	else:
+		known_status = Status.NEGATIVE
+
+#untested or inconclusive: a test would still tell you something
+func can_be_tested() -> bool:
+	return known_status == Status.UNKNOWN or known_status == Status.INCONCLUSIVE
 
 # -- Tasks --
 
@@ -99,6 +111,8 @@ func status_text(current_day: int = -1) -> String:
 			return "Infected"
 		Status.NEGATIVE:
 			return "Clear"
+		Status.INCONCLUSIVE:
+			return "Inconclusive"
 		_:
 			return "Unknown"
 

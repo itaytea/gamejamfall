@@ -75,7 +75,7 @@ func _start_day() -> void:
 		return
 	visitors.clear()
 	for i in randi_range(Balance.VISITORS_MIN, Balance.VISITORS_MAX):
-		visitors.append(_make_person(Balance.VISITOR_INFECT_CHANCE))
+		visitors.append(_make_person(visitor_infect_chance()))
 	visitors_changed.emit()
 	_set_stage(Stage.ADMISSION)
 
@@ -93,7 +93,7 @@ func is_farm_full() -> bool:
 
 
 func can_test(r: Resident) -> bool:
-	return meals >= Balance.TEST_COST and r.known_status == Resident.Status.UNKNOWN
+	return meals >= Balance.TEST_COST and r.can_be_tested()
 
 
 ## Door scene: if this returns true, play the visitor's "tested" cue.
@@ -146,15 +146,25 @@ func present_residents() -> Array:
 	return residents.filter(func(r): return r.is_present())
 
 
+## D: visitors are more likely to be infected the longer the outbreak goes on.
+func visitor_infect_chance() -> float:
+	return minf(Balance.VISITOR_INFECT_CHANCE + (day - 1) * Balance.VISITOR_INFECT_CHANCE_PER_DAY, Balance.INFECT_CHANCE_CAP)
+
+
+## C: only GARDEN_PLOTS gardeners produce; any extra gardeners make nothing.
+func productive_gardeners() -> int:
+	var gardeners := residents.filter(func(r): return r.is_present() and r.task == Resident.Task.GARDENER).size()
+	return mini(gardeners, Balance.GARDEN_PLOTS)
+
+
 func has_guard() -> bool:
 	return residents.any(func(r): return r.is_present() and r.task == Resident.Task.GUARD)
 
 
 ## Guaranteed food tomorrow morning: gardens minus mouths. Ignores foragers and events.
 func projected_meals() -> int:
-	var gardeners := residents.filter(func(r): return r.is_present() and r.task == Resident.Task.GARDENER).size()
 	var mouths := present_residents().size() + 1
-	return meals + gardeners * Balance.GARDEN_YIELD - mouths * Balance.MEALS_PER_PERSON
+	return meals + productive_gardeners() * Balance.GARDEN_YIELD - mouths * Balance.MEALS_PER_PERSON
 
 
 # ================================================================ The night
@@ -165,20 +175,18 @@ func _resolve_night() -> void:
 	# 1. Random event (may modify the steps below)
 	_roll_event()
 
-	# 2. Gardens, as one combined event
+	# 2. Gardens, as one combined event. Only GARDEN_PLOTS gardeners produce (C).
 	var yield_per := _garden_yield_override if _garden_yield_override >= 0 else Balance.GARDEN_YIELD
-	var gardeners := 0
-	for r in residents:
-		if r.is_present() and r.task == Resident.Task.GARDENER:
-			gardeners += 1
+	var gardeners := productive_gardeners()
 	if gardeners > 0:
 		meals += gardeners * yield_per
 		_event("garden", {"gardeners": gardeners, "amount": gardeners * yield_per})
 
 	# 3. Foragers. is_dead here reflects earlier nights, since the disease ticks below.
+	#    B: even healthy foragers can die on the road.
 	for r in residents.duplicate():
 		if r.is_away and r.tick_forage():
-			if r.is_dead:
+			if r.is_dead or randf() < Balance.FORAGE_DEATH_CHANCE:
 				residents.erase(r)
 				_event("forager_lost", {"name": r.name})
 			else:
@@ -245,7 +253,7 @@ func _forced_entry() -> void:
 	for i in randi_range(Balance.VISITORS_MIN, Balance.VISITORS_MAX):
 		if is_farm_full():
 			break
-		var r := _make_person(Balance.NO_GUARD_INFECT_CHANCE)
+		var r := _make_person(maxf(Balance.NO_GUARD_INFECT_CHANCE, visitor_infect_chance()))
 		residents.append(r)
 		_event("slipped_in", {"name": r.name})
 	residents_changed.emit()

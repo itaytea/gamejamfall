@@ -8,15 +8,15 @@ func _ready() -> void:
 	_refresh()
 
 
-## 1st person guards, 2nd gardens, the rest alternate forager / gardener.
+## 1st person guards, the next GARDEN_PLOTS garden, everyone else forages.
 func _auto_assign() -> void:
 	var people: Array = GameState.present_residents()
 	for i in people.size():
-		var task := Resident.Task.GARDENER
+		var task := Resident.Task.FORAGER
 		if i == 0:
 			task = Resident.Task.GUARD
-		elif i >= 2 and i % 2 == 0:
-			task = Resident.Task.FORAGER
+		elif i <= Balance.GARDEN_PLOTS:
+			task = Resident.Task.GARDENER
 		GameState.assign_task(people[i], task)
 	_refresh()
 
