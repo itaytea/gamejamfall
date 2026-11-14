@@ -28,7 +28,6 @@ var is_dead := false
 
 #sickness - known variables
 var known_status: Status = Status.UNKOWN
-var tested_on_day := -1
 
 #farm status
 var days_on_farm := 0
@@ -69,7 +68,6 @@ func tick_disease() -> bool:
 #reveals pos or neg upon a test, script calling should spend the meal
 func run_test(current_day: int) -> void:
 	known_status = Status.POSITIVE if is_infected else Status.NEGATIVE
-	tested_on_day = current_day
 
 # -- Tasks --
 
@@ -79,4 +77,41 @@ func is_present() -> bool:
 
 #assings task to person
 func set_task(new_task: Task) -> void:
-	return
+	if not is_present():
+		return
+	task = new_task
+	if new_task ==Task.FORAGER:
+		is_away = true
+		forage_days_left = FORAGE_DAYS
+		
+#call at night for anyone away. GameState wil later check is_dead:
+func tick_forage() -> bool:
+	if not is_away:
+		return false
+	forage_days_left -= 1
+	return forage_days_left <= 0
+
+func return_home() -> void:
+	is_away = false
+	forage_days_left = 0
+	task = Task.IDLE
+
+# -- diaplay helpers, return String for UI --
+func status_text(current_day: int = -1) -> String:
+	match known_status:
+		Status.POSITIVE:
+			return "Infected"
+		Status.NEGATIVE:
+			return "Clear"
+		_:
+			return "Unkown"
+
+func task_text() -> String:
+	if is_away:
+		return "foraging (%dd)" % forage_days_left
+	return Task.keys()[task].capitalize()
+	
+# debug only
+func debug_text() -> String:
+	var clock := "healthy" if not is_infected else "%dd days left" % days_until_death
+	return "%s | %s | %s%s" % [name, clock, task_text(), " | Dead" if is_dead else ""]
