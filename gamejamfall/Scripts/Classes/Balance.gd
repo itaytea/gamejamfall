@@ -1,10 +1,11 @@
 class_name Balance
 extends RefCounted
 
+#character randomization
 const PORTRAIT_COUNT := 1
 const DIALOGUE_SET_COUNT := 3
 
-
+#
 const FORAGE_DAYS := 2
 const GARDEN_YIELD := 3
 const POOR_HARVEST_YIELD := 2
@@ -12,6 +13,7 @@ const FORAGE_MIN := 3
 const FORAGE_MAX := 4
 const MAX_RESIDENTS := 7
 const GARDEN_PLOTS := 2                      # C: only this many gardeners produce food; extras do nothing
+const ROAD_INFECT_CHANCE := 0.2             # foragers can catch it on the road (the player isn't told)
 const FORAGE_DEATH_CHANCE := 0.25            # B: chance a forager dies on the road (they never come back)
 
 #disease parameters
@@ -21,6 +23,7 @@ const VISITOR_INFECT_CHANCE_PER_DAY := 0.02   # D: visitors get sicker as the ou
 const NO_GUARD_INFECT_CHANCE := 0.7
 const TEST_FAIL_CHANCE := 0.12              # A: a test can come back inconclusive (meal still spent)
 const TEST_FALSE_NEGATIVE_CHANCE := 0.2      # A: an infected person can wrongly test Clear (the player isn't told)
+
 
 const TEST_COST := 1
 const EXILE_COST := 1

@@ -6,13 +6,13 @@
 # Write a colon as \: (a plain "word:" at the start would be read as a speaker's name).
 
 ~ not_enough_food
-Not enough food for tonight!
+Not everyone is guranteed to be fed!
 => END
 
 ~ no_guard
-No guard\: strangers may slip in.
+No guard\: strangers might sneak into the compound!
 => END
 
 ~ too_many_gardeners
-Only {{plots}} plots\: extra gardeners do nothing.
+Only {{plots}} plots on the farm\: extra hands won't help!
 => END

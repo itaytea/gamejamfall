@@ -93,6 +93,10 @@ func set_task(new_task: Task) -> void:
 func depart() -> void:
 	is_away = true
 	forage_days_left = Balance.FORAGE_DAYS
+	#they might catch it out there; unlike infect(), the player isn't told
+	if not is_infected and randf() < Balance.ROAD_INFECT_CHANCE:
+		is_infected = true
+		days_until_death = Balance.DISEASE_DAYS
 		
 #call at night for anyone away. GameState wil later check is_dead:
 func tick_forage() -> bool:
@@ -105,6 +109,9 @@ func return_home() -> void:
 	is_away = false
 	forage_days_left = 0
 	task = Task.IDLE
+	#anyone back from the road might have caught it, so an old Clear result no longer counts
+	if known_status != Status.POSITIVE:
+		known_status = Status.UNKNOWN
 
 # -- diaplay helpers, return String for UI --
 func status_text(current_day: int = -1) -> String:

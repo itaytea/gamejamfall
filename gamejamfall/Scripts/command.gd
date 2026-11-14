@@ -2,6 +2,7 @@ extends Control
 ## Command stage: see every resident, give them a task, exile people, end the day.
 ## - Click a task to cycle Idle > Guard > Garden > Forage (right-click goes backwards).
 ## - Foragers leave when you press End Day, so you can change your mind until then.
+## - T tests a resident (costs a meal). Anyone but known-infected can be retested.
 ## - Exile costs a meal: click X once to arm it (shows ?), click again to confirm.
 ## Rows are built in code; their look comes from the Theme on this scene's root.
 
@@ -106,6 +107,13 @@ func _make_row(r: Resident) -> HBoxContainer:
 
 	row.add_child(_label("%dd" % r.days_on_farm, 16))
 
+	var test := Button.new()
+	test.custom_minimum_size = Vector2(12, 0)
+	test.text = "T"
+	test.disabled = not GameState.can_test_resident(r)
+	test.pressed.connect(_on_test.bind(r))
+	row.add_child(test)
+
 	var task := Button.new()
 	task.custom_minimum_size = Vector2(48, 0)
 	if r.is_away:
@@ -139,6 +147,11 @@ func _status_color(r: Resident) -> Color:
 		Resident.Status.NEGATIVE: return COLOR_CLEAR
 		Resident.Status.INCONCLUSIVE: return COLOR_INCONCLUSIVE
 	return COLOR_UNKNOWN
+
+
+func _on_test(r: Resident) -> void:
+	_exile_armed = null
+	GameState.test_resident(r)
 
 
 func _cycle_task(r: Resident, direction: int) -> void:

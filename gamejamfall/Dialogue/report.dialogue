@@ -63,6 +63,10 @@ Everyone was fed. {{amount}} meals gone, {{left}} left.
 No one kept watch last night.
 => END
 
+~ farm_full
+The farm is full. No one else can be let in.
+=> END
+
 ~ slipped_in
 % {{name}} slipped in while everyone slept.
 % 

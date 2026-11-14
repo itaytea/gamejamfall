@@ -106,6 +106,21 @@ func test_visitor(r: Resident) -> bool:
 	return true
 
 
+## Residents can be retested any time (results can be wrong, and foragers can bring it home),
+## except people already known to be infected: a positive result is always right.
+func can_test_resident(r: Resident) -> bool:
+	return meals >= Balance.TEST_COST and r.is_present() and r.known_status != Resident.Status.POSITIVE
+
+
+func test_resident(r: Resident) -> bool:
+	if not can_test_resident(r):
+		return false
+	meals -= Balance.TEST_COST
+	r.run_test()
+	residents_changed.emit()
+	return true
+
+
 func admit_visitor(r: Resident) -> bool:
 	if is_farm_full():
 		return false
@@ -237,8 +252,14 @@ func _resolve_night() -> void:
 		_lose("lost_alone", "You are the last one standing.")
 		return
 
-	# 8. No guard: people slip in overnight, and tomorrow's admission is skipped
-	if not has_guard():
+	# 8. Farm full: no one can be let in, so tomorrow's door is skipped (and no one slips in)
+	if is_farm_full():
+		_skip_admission = true
+		if not has_guard():
+			_event("no_guard")
+		_event("farm_full")
+	# 9. No guard: people slip in overnight, and tomorrow's admission is skipped
+	elif not has_guard():
 		_forced_entry()
 
 
