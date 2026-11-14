@@ -1,0 +1,139 @@
+[gd_scene format=3 uid="uid://dax0428kae80t"]
+
+[ext_resource type="Script" uid="uid://dteg38rceiro8" path="res://Scripts/command.gd" id="1_cmd"]
+[ext_resource type="Texture2D" uid="uid://cpgxdekwk7oxj" path="res://Sprites/background.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://bpc41mq3nbaa5" path="res://Sprites/base_name_textbox.png" id="3_textbox"]
+
+[sub_resource type="StyleBoxFlat" id="btn_disabled"]
+content_margin_left = 2.0
+content_margin_right = 2.0
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.12, 0.12, 0.3)
+
+[sub_resource type="StyleBoxEmpty" id="btn_focus"]
+
+[sub_resource type="StyleBoxFlat" id="btn_hover"]
+content_margin_left = 2.0
+content_margin_right = 2.0
+bg_color = Color(0.14, 0.12, 0.12, 0.15)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.12, 0.12, 1)
+
+[sub_resource type="StyleBoxFlat" id="btn_normal"]
+content_margin_left = 2.0
+content_margin_right = 2.0
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.12, 0.12, 1)
+
+[sub_resource type="StyleBoxFlat" id="btn_pressed"]
+content_margin_left = 2.0
+content_margin_right = 2.0
+bg_color = Color(0.14, 0.12, 0.12, 0.35)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.12, 0.12, 1)
+
+[sub_resource type="Theme" id="cmd_theme"]
+default_font_size = 9
+Button/colors/font_color = Color(0.14, 0.12, 0.12, 1)
+Button/colors/font_disabled_color = Color(0.14, 0.12, 0.12, 0.45)
+Button/colors/font_focus_color = Color(0.14, 0.12, 0.12, 1)
+Button/colors/font_hover_color = Color(0.14, 0.12, 0.12, 1)
+Button/colors/font_pressed_color = Color(0.14, 0.12, 0.12, 1)
+Button/styles/disabled = SubResource("btn_disabled")
+Button/styles/focus = SubResource("btn_focus")
+Button/styles/hover = SubResource("btn_hover")
+Button/styles/normal = SubResource("btn_normal")
+Button/styles/pressed = SubResource("btn_pressed")
+Label/colors/font_color = Color(0.14, 0.12, 0.12, 1)
+
+[node name="Command" type="Control" unique_id=261065270]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = SubResource("cmd_theme")
+script = ExtResource("1_cmd")
+
+[node name="Background" type="TextureRect" parent="." unique_id=639800623]
+layout_mode = 0
+offset_right = 240.0
+offset_bottom = 135.0
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="Panel" type="NinePatchRect" parent="." unique_id=826892523]
+self_modulate = Color(1, 1, 1, 0.7)
+layout_mode = 0
+offset_left = 6.0
+offset_top = 4.0
+offset_right = 234.0
+offset_bottom = 131.0
+texture = ExtResource("3_textbox")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Header" type="HBoxContainer" parent="Panel" unique_id=1963078174]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 3.0
+offset_right = 221.0
+offset_bottom = 17.0
+theme_override_constants/separation = 10
+
+[node name="Day" type="Label" parent="Panel/Header" unique_id=1751613699]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+
+[node name="Food" type="Label" parent="Panel/Header" unique_id=1565292041]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="Farm" type="Label" parent="Panel/Header" unique_id=1388602198]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Rows" type="VBoxContainer" parent="Panel" unique_id=1310381842]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 18.0
+offset_right = 221.0
+offset_bottom = 110.0
+theme_override_constants/separation = 0
+
+[node name="Warning" type="Label" parent="Panel" unique_id=2087121642]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 110.0
+offset_right = 160.0
+offset_bottom = 126.0
+theme_override_colors/font_color = Color(0.62, 0.16, 0.14, 1)
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 8
+
+[node name="EndDay" type="Button" parent="Panel" unique_id=1326504211]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 111.0
+offset_right = 221.0
+offset_bottom = 124.0
+text = "END DAY"

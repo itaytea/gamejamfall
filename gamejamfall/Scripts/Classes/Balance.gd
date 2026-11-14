@@ -6,10 +6,10 @@ const DIALOGUE_SET_COUNT := 3
 
 
 const FORAGE_DAYS := 2
-const GARDEN_YIELD := 4
-const POOR_HARVEST_YIELD := 3
-const FORAGE_MIN := 9
-const FORAGE_MAX := 12
+const GARDEN_YIELD := 3
+const POOR_HARVEST_YIELD := 2
+const FORAGE_MIN := 3
+const FORAGE_MAX := 4
 const MAX_RESIDENTS := 7
 const GARDEN_PLOTS := 2                      # C: only this many gardeners produce food; extras do nothing
 const FORAGE_DEATH_CHANCE := 0.25            # B: chance a forager dies on the road (they never come back)

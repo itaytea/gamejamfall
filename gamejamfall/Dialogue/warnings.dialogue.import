@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://jlcif7u8i3xt"
+path="res://.godot/imported/warnings.dialogue-1db743d63d2dd5c2d02cb01211d76660.tres"
+
+[deps]
+
+source_file="res://Dialogue/warnings.dialogue"
+dest_files=["res://.godot/imported/warnings.dialogue-1db743d63d2dd5c2d02cb01211d76660.tres"]
+
+[params]
+
+defaults=true

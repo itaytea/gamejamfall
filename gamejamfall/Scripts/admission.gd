@@ -81,5 +81,3 @@ func _refresh() -> void:
 	_test_button.disabled = _busy or not GameState.can_test(_visitor)
 	_admit_button.disabled = _busy or GameState.is_farm_full()
 	_deny_button.disabled = _busy
-	_admit_button.tooltip_text = "The farm is full" if GameState.is_farm_full() else ""
-	_test_button.tooltip_text = "Costs %d meal" % Balance.TEST_COST

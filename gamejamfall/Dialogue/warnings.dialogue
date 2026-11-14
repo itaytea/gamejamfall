@@ -1,0 +1,18 @@
+# Warnings at the bottom of the Command menu.
+# At most two show at once, in this order: not_enough_food, no_guard, too_many_gardeners.
+# Values you can use: {{food}} (food now), {{projected}} (food after tonight),
+# {{gardeners}} (people set to Garden), {{plots}} (garden plots).
+# Keep each warning short: one line, about 40 characters.
+# Write a colon as \: (a plain "word:" at the start would be read as a speaker's name).
+
+~ not_enough_food
+Not enough food for tonight!
+=> END
+
+~ no_guard
+No guard\: strangers may slip in.
+=> END
+
+~ too_many_gardeners
+Only {{plots}} plots\: extra gardeners do nothing.
+=> END

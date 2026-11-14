@@ -7,8 +7,8 @@ extends Control
 
 var _scenes := {
 	GameState.Stage.ADMISSION: preload("res://Scenes/Admission.tscn"),
-	GameState.Stage.COMMAND: preload("res://Scenes/Placeholders/command_placeholder.tscn"),
-	GameState.Stage.CONSEQUENCES: preload("res://Scenes/Placeholders/consequences_placeholder.tscn"),
+	GameState.Stage.COMMAND: preload("res://Scenes/Command.tscn"),
+	GameState.Stage.CONSEQUENCES: preload("res://Scenes/Consequences.tscn"),
 }
 var _game_over_scene := preload("res://Scenes/Placeholders/game_over_placeholder.tscn")
 var _current: Node

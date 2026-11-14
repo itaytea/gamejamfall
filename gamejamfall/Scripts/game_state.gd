@@ -30,7 +30,7 @@ var _garden_yield_override := -1      # Set by events; -1 = normal yield
 
 func start_new_run() -> void:
 	day = 1
-	meals = 0
+	meals = 2
 	residents.clear()
 	visitors.clear()
 	events.clear()
@@ -163,7 +163,8 @@ func has_guard() -> bool:
 
 ## Guaranteed food tomorrow morning: gardens minus mouths. Ignores foragers and events.
 func projected_meals() -> int:
-	var mouths := present_residents().size() + 1
+	var leaving := residents.filter(func(r): return r.is_present() and r.task == Resident.Task.FORAGER).size()
+	var mouths := present_residents().size() - leaving + 1
 	return meals + productive_gardeners() * Balance.GARDEN_YIELD - mouths * Balance.MEALS_PER_PERSON
 
 
@@ -171,6 +172,11 @@ func projected_meals() -> int:
 
 func _resolve_night() -> void:
 	events.clear()
+
+	# 0. Anyone assigned to forage sets off now (they don't eat at home tonight)
+	for r in residents:
+		if r.is_present() and r.task == Resident.Task.FORAGER:
+			r.depart()
 
 	# 1. Random event (may modify the steps below)
 	_roll_event()

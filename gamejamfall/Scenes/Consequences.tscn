@@ -1,0 +1,71 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/consequences.gd" id="1_cons"]
+[ext_resource type="Script" path="res://Scripts/UI/dialogue_box.gd" id="2_box"]
+[ext_resource type="Texture2D" path="res://Sprites/background.png" id="3_bg"]
+[ext_resource type="Texture2D" path="res://Sprites/base_name_textbox.png" id="4_textbox"]
+
+[node name="Consequences" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_cons")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 240.0
+offset_bottom = 135.0
+mouse_filter = 2
+texture = ExtResource("3_bg")
+
+[node name="NightTint" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 240.0
+offset_bottom = 135.0
+mouse_filter = 2
+color = Color(0.04, 0.05, 0.12, 0.62)
+
+[node name="Box" type="NinePatchRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.85)
+layout_mode = 0
+offset_left = 30.0
+offset_top = 24.0
+offset_right = 210.0
+offset_bottom = 111.0
+mouse_filter = 2
+texture = ExtResource("4_textbox")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Title" type="Label" parent="Box"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 3.0
+offset_right = 172.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 13
+
+[node name="DialogueBox" type="Control" parent="Box" node_paths=PackedStringArray("text_label")]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 20.0
+offset_right = 172.0
+offset_bottom = 72.0
+mouse_filter = 2
+script = ExtResource("2_box")
+text_label = NodePath("Text")
+
+[node name="Text" type="Label" parent="Box/DialogueBox"]
+layout_mode = 0
+offset_right = 164.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 11
+autowrap_mode = 3

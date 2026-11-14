@@ -88,9 +88,11 @@ func set_task(new_task: Task) -> void:
 	if not is_present():
 		return
 	task = new_task
-	if new_task ==Task.FORAGER:
-		is_away = true
-		forage_days_left = Balance.FORAGE_DAYS
+
+#foragers leave when the day ends (GameState calls this), so the player can change their mind until then
+func depart() -> void:
+	is_away = true
+	forage_days_left = Balance.FORAGE_DAYS
 		
 #call at night for anyone away. GameState wil later check is_dead:
 func tick_forage() -> bool:
