@@ -22,6 +22,10 @@ const NAMES := ["Itay", "Darinah", "Sam", "Keira", "Cameron", "Joan", "Iwa",
 #identity
 var name : String
 var portrait_id: int #for now, if drinah decides to have a randomized system itll be different
+var base_id: int
+var clothes_id: int
+var face_id: int
+var hair_id: int
 var dialogue_id: int
 #sickness - hidden variables
 var is_infected := false
@@ -44,6 +48,10 @@ static func random(infect_chance: float) -> Resident:
 	r.name = NAMES.pick_random()
 	r.dialogue_id = randi() % Balance.DIALOGUE_SET_COUNT
 	r.portrait_id = randi() % Balance.PORTRAIT_COUNT
+	r.base_id = randi() % Balance.BASE_COUNT
+	r.clothes_id = randi() % Balance.CLOTHES_COUNT
+	r.face_id = randi() % Balance.FACE_COUNT
+	r.hair_id = randi() % Balance.HAIR_COUNT
 	if randf() < Balance.ATTRIBUTE_CHANCE:
 		r.attribute = [Attribute.GREEDY, Attribute.BELLIGERENT, Attribute.SUPERSPREADER].pick_random()
 	if randf() < infect_chance:

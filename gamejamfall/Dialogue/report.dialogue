@@ -3,18 +3,29 @@
 # Lines with no "Name:" are narration. Keep each line under ~70 characters.
 # Use % for random variations, like in visitors.dialogue.
 
+# poor_harvest: {{amount}} = meals per gardener tonight, {{total}} = what the whole garden made,
+# {{name}} = a gardener who was working (to blame).
 ~ poor_harvest
 % Maggots were seen on the farm, infested crops had to be thrown out
-% The soil was tired, the harvest came up thin 
+% The soil was tired, the harvest came up thin
+%
+	Temperatures on the plot fell below zero,
+	{{name}} could only come up with {{amount}} meals
+% {{name}} didn't make an effort to irrigate the plot properly
 % 
-	Temperatures on the plot fell below zero, 
-	gardeners could only come up with {{amount}} meals
+	{{name}} tripped and fell while working the plot
+	they only managed to produce {{amount}} meals tonight
+% {{name}} spotted a scarecrow eating away at vegtables at the plot
+% 
+	{{name}} reported newly grown vegtables present a weird color
+	unsure if they are edible, they threw this night's batch out
 => END
 
 ~ garden
 if gardeners == 1
 	% The garden gave {{amount}} meals.
 	% One pair of hands on the plot. {{amount}} meals.
+	% Working hard on the farm, {{name}} produced {{amount}} meals
 else
 	% The garden gave {{amount}} meals.
 	% {{gardeners}} gardeners brought in {{amount}} meals.
@@ -22,24 +33,41 @@ else
 => END
 
 ~ forager_returned
-% {{name}} came back from their journey with {{amount}} meals.
-% {{name}} made it home unscathed, carrying {{amount}} meals.
-% 
-	{{name}} is back, the glimmer from their eyes is gone
-	the wilderness is not for everyone,
-	luckily, the search has not been fruitless
-	{{name}} provided the resident's of the farm with {{amount}} meals
-% 
-	Seems the Resident's of the farm will be having a hearty meal
-	{{name}} came back with {{amount}} meals
+if food <= 5
+	% 
+		Luckily, {{name}} came back with much needed supplies
+		Enough for {{amount}} meals
+	% Thankfully, {{name}} is back with {{amount}} meals
+	%
+		{{name}} is back from the hunt with some animal meat
+		You are not quite sure what it is, but the situation is dire
+else
+	%2 {{name}} came back from their journey with {{amount}} meals.
+	%2 {{name}} made it home unscathed, carrying {{amount}} meals.
+	%2 {{name}} 
+	%
+		{{name}} is back. The glimmer in their eyes is gone; the wilderness is not for everyone.
+		Luckily, the search was not fruitless. {{name}} brought the farm {{amount}} meals.
+	%
+		Seems the residents of the farm will be having a hearty meal.
+		{{name}} came back with {{amount}} meals.
+	%
+		{{name}} came back tonight. Around the dinner table, they told stories of the outside world.
+		It seems the disease is spreading with no end in sight.
+		Despite it all, they brought back enough food for {{amount}} meals.
+	%
+		{{name}} has arrived on the farm, dirt on their clothes.
+		They found a cattle farm not far away, the cattle roaming with no one to care for them.
+		The residents of the farm will be eating steak tonight.
 => END
 
 ~ forager_lost
 % {{name}} never came back from the road.
 % There's no sign of {{name}}. They aren't coming back.
 % {{name}} has likely not survived the Washington wilderness
-% Two days have passed since {{name}}'s depature, with no signs of life
+% Two days have passed since {{name}}'s departure, with no signs of life
 % {{name}} has not made it back.
+
 => END
 
 ~ eaten

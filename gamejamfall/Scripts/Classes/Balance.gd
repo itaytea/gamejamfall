@@ -3,6 +3,10 @@ extends RefCounted
 
 #character randomization
 const PORTRAIT_COUNT := 1
+const BASE_COUNT := 4
+const CLOTHES_COUNT := 14
+const FACE_COUNT := 10
+const HAIR_COUNT := 18
 const DIALOGUE_SET_COUNT := 6
 
 #

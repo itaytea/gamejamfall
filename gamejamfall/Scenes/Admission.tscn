@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://cebe0kx33byoe" path="res://Scripts/admission.gd" id="1_adm"]
 [ext_resource type="Script" uid="uid://c1tmwa53ruxe5" path="res://Scripts/UI/dialogue_box.gd" id="2_box"]
 [ext_resource type="Texture2D" uid="uid://cpgxdekwk7oxj" path="res://Sprites/background.png" id="3_bg"]
-[ext_resource type="Texture2D" uid="uid://1hq8hs5cb0lu" path="res://Sprites/base_human_sprite.png" id="4_human"]
 [ext_resource type="Texture2D" uid="uid://bpc41mq3nbaa5" path="res://Sprites/base_name_textbox.png" id="5_textbox"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/NpcPortrait.tscn" id="6_portrait"]
 
 [sub_resource type="StyleBoxFlat" id="btn_normal"]
 bg_color = Color(1, 1, 1, 0)
@@ -80,24 +80,11 @@ theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_constants/line_spacing = -2
 theme_override_font_sizes/font_size = 8
 
-[node name="Shadow" type="TextureRect" parent="." unique_id=880795377]
-modulate = Color(0, 0, 0, 0.65)
-layout_mode = 0
-offset_left = 46.0
-offset_top = 26.0
-offset_right = 136.0
-offset_bottom = 136.0
-mouse_filter = 2
-texture = ExtResource("4_human")
-
-[node name="Visitor" type="TextureRect" parent="." unique_id=1618690996]
-layout_mode = 0
+[node name="Visitor" parent="." instance=ExtResource("6_portrait")]
 offset_left = 43.0
 offset_top = 25.0
 offset_right = 133.0
 offset_bottom = 135.0
-mouse_filter = 2
-texture = ExtResource("4_human")
 
 [node name="InfoBox" type="NinePatchRect" parent="." unique_id=1985363831]
 self_modulate = Color(1, 1, 1, 0.5)
