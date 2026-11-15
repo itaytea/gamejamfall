@@ -1,7 +1,8 @@
 # Each visitor has the same three cues: v<id>_greet, v<id>_tested, v<id>_rejected.
 # all three cues come from the same personality.
-# Add v3_..., v4_... sets and raise Balance.DIALOGUE_SET_COUNT to match.
-# Keep each line under ~55 characters so it fits the door's textbox; split longer speeches into several lines.
+# To add a set: add v<next>_... cues and add its weight to Balance.DIALOGUE_SET_WEIGHTS
+# (1.0 = regular, 0.5 = half as common, 0.25 = a quarter as common).
+# Keep each line under ~85 characters (4 lines in the door's textbox); split longer speeches into several lines.
 # Every cue must end with => END, or it runs on into the next cue.
 
 #-- v0
@@ -102,11 +103,207 @@
 ~ v5_rejected
 {{name}}: Brooooooooo, u gotta get a chill on for real.
 => END
+
+#-- v6  (frat bro)
+
+~ v6_greet
+{{name}}: Suh dude
+{{name}}: I was at Delta Chi Darty when that shit went down
+{{name}}: People freaking out like you wouldn’t believe it
+{{name}}: Swear to god, never seen nothing like that
+{{name}}: Now listen, your place seems grim, fucked up.
+{{name}}: How ’bout you give me a bed? I am swole, fit to help if you will
+{{name}}: How ’bout that, pal?
+=> END
+
+~ v6_tested
+{{name}}: Bet
+=> END
+
+~ v6_rejected
+{{name}}: You’re bugging, massive L
+=> END
+
+#-- v7  (hey sugar)
+
+~ v7_greet
+{{name}}: Hey sugar,
+{{name}}: Couldn’t help but notice ya got a little safe house situation going on
+{{name}}: I have a feeling we will get along well, no?
+=> END
+
+~ v7_tested
+{{name}}: Okay hun.
+=> END
+
+~ v7_rejected
+{{name}}: Chivalry is dead, huh
+=> END
+
+#-- v8  (end of the world)
+
+~ v8_greet
+{{name}}: It’s the end of the world, ain’t it?
+{{name}}: Somehow I have come to terms with it.
+{{name}}: It’s interesting, isn’t it. You think nothing ever happens until it happens.
+{{name}}: Anyhow, could use a bed in my last few weeks on this planet
+{{name}}: Any free ones?
+=> END
+
+~ v8_tested
+{{name}}: Sure, not like those matter
+{{name}}: Who’s to say this strip is even reliable
+=> END
+
+~ v8_rejected
+{{name}}: On we go…
+=> END
+
+#-- v9  (lost friend)
+
+~ v9_greet
+{{name}}: Have you seen my friend around here?
+{{name}}: About yay tall, about yay wide
+{{name}}: No? What a shame
+{{name}}: Mind if I stay here? In case they come by?
+=> END
+
+~ v9_tested
+{{name}}: Okay
+=> END
+
+~ v9_rejected
+{{name}}: It’s unfortunate. I understand though.
+=> END
+
+#-- v10  (radio listener)
+
+~ v10_greet
+{{name}}: Man this fungus thing, really nerve wracking
+{{name}}: They say on the radio scientists have never seen anything like it
+{{name}}: It eats you from the inside out, real life zombies…
+{{name}}: I am looking for shelter, anything to offer?
+=> END
+
+~ v10_tested
+{{name}}: Promise you, got none of that rot in me
+{{name}}: But as long as I get a bed
+=> END
+
+~ v10_rejected
+{{name}}: Hope the rot doesn’t come to you
+=> END
+
+#-- v11  (who can ya trust)
+
+~ v11_greet
+{{name}}: Yo, listen
+{{name}}: Feels like everyone has gone mad, no?
+{{name}}: Some say you don’t even feel it…
+{{name}}: Then some say the rot drives you mad…
+{{name}}: Who can ya trust anyway? No one survived to tell the story
+=> END
+
+~ v11_tested
+{{name}}: Those tests mean nothing, I swear
+{{name}}: Rot’ll find a way, but sure
+=> END
+
+~ v11_rejected
+{{name}}: Good luck to you.
+=> END
+
+#-- v12  (conspiracy)
+
+~ v12_greet
+{{name}}: I knew it! I knew it! I knew it!
+{{name}}: This is all vaccines! All modern medicine! Lab experiment gone rogue!
+{{name}}: This is simply the logical conclusion of human-flesh-eating-elite-hivemind experiments
+{{name}}: But I am not one of them, I swear!
+{{name}}: I swear! I swear! I swear!
+{{name}}: So let me in, why dontcha?
+=> END
+
+~ v12_tested
+{{name}}: URGH, fine.
+{{name}}: You’re one of them cattle
+=> END
+
+~ v12_rejected
+{{name}}: I knew it! I knew it! I knew it!
+=> END
+
+#-- v13  (zombie movie expert)
+
+~ v13_greet
+{{name}}: What a day, eh?
+{{name}}: That’s nothing new to me, you see,
+{{name}}: I watched every zombie movie, I have all the knowledge you might need
+{{name}}: People think it’s not zombies, but they know nothing! This is textbook.
+=> END
+
+~ v13_tested
+{{name}}: I don’t bite!
+=> END
+
+~ v13_rejected
+{{name}}: Big mistake, you’d be pressed to find someone who knows as much as I do
+=> END
+
+#-- v14  (FREAKS)
+
+~ v14_greet
+{{name}}: FREAKS! They’re all freaks. Everyone seems to have forgotten human decency.
+{{name}}: The moment some pandemic hits, we go crazy.
+{{name}}: But you, you seem normal. How about we team up?
+{{name}}: I see you got yourself a nice little garden, bet I can help with those
+=> END
+
+~ v14_tested
+{{name}}: Test? This “disease” is nothing more than a common flu. Whatever…
+=> END
+
+~ v14_rejected
+{{name}}: FREAK!
+=> END
+
+#-- v15  (rare (0.5): picket fence)
+
+~ v15_greet
+{{name}}: College education, stable job, credit score, nice house, nice wife, nice kids
+{{name}}: Picket fence, green grass, nice TV set, Disneyland every two years.
+{{name}}: It’s all gone, I didn’t care for it anyway.
+{{name}}: Always wondered what it’s like to live like the pilgrims.
+=> END
+
+~ v15_tested
+{{name}}: Sure
+=> END
+
+~ v15_rejected
+{{name}}: Alright, best of luck
+=> END
+
+#-- v16  (rare (0.25): neighbor)
+
+~ v16_greet
+{{name}}: Bless you, neighbor
+{{name}}: As the LORD commands Israel to love their neighbor as themselves.
+{{name}}: Aren’t we all neighbors after all?
+{{name}}: If you let me in, brother, I will bless this very house
+=> END
+
+~ v16_tested
+{{name}}: Amen
+=> END
+
+~ v16_rejected
+{{name}}: And to abandon your neighbor in a plight?
+=> END
+
 # any beds? any food?
 # are there other people here?
 # have u seen this person around here?
 # i am looking for my __ (mom, son)
 # i am on the run
 # seductive person (hey sugar)
-# frat bro
-# 

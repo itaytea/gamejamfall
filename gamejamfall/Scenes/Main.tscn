@@ -1,6 +1,11 @@
 [gd_scene format=3 uid="uid://dit0firpb0yh3"]
 
 [ext_resource type="Script" uid="uid://c02te8ec5jr4u" path="res://Scripts/main.gd" id="1_main"]
+[ext_resource type="Shader" path="res://Shaders/tv_static.gdshader" id="2_static"]
+[ext_resource type="Script" path="res://Scripts/UI/infection_static.gd" id="3_static"]
+
+[sub_resource type="ShaderMaterial" id="static_mat"]
+shader = ExtResource("2_static")
 
 [node name="Main" type="Control" unique_id=790885217]
 layout_mode = 3
@@ -20,6 +25,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="StaticLayer" type="CanvasLayer" parent="."]
+layer = 6
+
+[node name="Static" type="ColorRect" parent="StaticLayer"]
+visible = false
+offset_right = 240.0
+offset_bottom = 135.0
+mouse_filter = 2
+material = SubResource("static_mat")
+script = ExtResource("3_static")
 
 [node name="FadeLayer" type="CanvasLayer" parent="."]
 layer = 10
