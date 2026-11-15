@@ -213,12 +213,12 @@ There is not enough food to feed everyone. {{count}} resident(s) must go without
 => END
 
 ~ bed_built
-{{name}} spent the night hammering and sawing. The farm now has an extra bed!
+% {{name}} spent the night hammering and sawing. The farm now has an extra bed!
 % Working through the night, {{name}} managed to construct a new bed using the scavenged materials.
 => END
 
 ~ starved
-{{name}} went without food for too long and didn't make it through the night.
+% {{name}} went without food for too long and didn't make it through the night.
 % Weakened from hunger, {{name}} passed away.
 => END
 
@@ -237,20 +237,4 @@ There is not enough food to feed everyone. {{count}} resident(s) must go without
 ~ tattle_fight
 % {{accuser}} insists {{accused}} started the fight.
 % {{accuser}} says it was all {{accused}}'s doing.
-=> END
-
-# ---------------------------------------------------------------- Rationing
-# ration_needed: plays just before the player picks who goes without. {{count}} = how many.
-~ ration_needed
-There isn't enough food for everyone tonight.
-if count == 1
-	Someone will have to go without.
-else
-	{{count}} people will have to go without.
-=> END
-
-# starved: {{name}} was picked to go without, and starved.
-~ starved
-% {{name}} went without food tonight. They didn't survive it.
-% {{name}} gave up their share. They didn't wake up.
 => END
