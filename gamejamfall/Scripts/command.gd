@@ -34,6 +34,7 @@ const TASK_NAMES := {
 
 @onready var _day: Label = $Panel/Header/Day
 @onready var _food: Label = $Panel/Header/Food
+@onready var _materials: Label = $Panel/Header/Materials
 @onready var _farm: Label = $Panel/Header/Farm
 @onready var _rows: VBoxContainer = $Panel/Rows
 @onready var _columns: HBoxContainer = $Panel/Columns
@@ -79,6 +80,7 @@ func _refresh_header() -> void:
 	_day.text = "DAY %d" % GameState.day
 	_food.text = "FOOD %d > %d" % [GameState.meals, GameState.projected_meals()]
 	_farm.text = "%d/%d" % [GameState.residents.size(), Balance.MAX_RESIDENTS]
+	_materials.text = "MATS %d" % GameState.materials   
 
 
 ## Warning text lives in Dialogue/warnings.dialogue so it can be edited without code.

@@ -46,9 +46,6 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.14, 0.12, 0.12, 1)
 
-[sub_resource type="StyleBoxEmpty" id="header_baseline"]
-content_margin_top = 3.8
-
 [sub_resource type="Theme" id="cmd_theme"]
 default_font_size = 9
 Button/colors/font_color = Color(0.14, 0.12, 0.12, 1)
@@ -62,6 +59,9 @@ Button/styles/hover = SubResource("btn_hover")
 Button/styles/normal = SubResource("btn_normal")
 Button/styles/pressed = SubResource("btn_pressed")
 Label/colors/font_color = Color(0.14, 0.12, 0.12, 1)
+
+[sub_resource type="StyleBoxEmpty" id="header_baseline"]
+content_margin_top = 3.8
 
 [node name="Command" type="Control" unique_id=261065270]
 layout_mode = 3
@@ -112,37 +112,43 @@ size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_override_styles/normal = SubResource("header_baseline")
 
+[node name="Materials" type="Label" parent="Panel/Header" unique_id=518768959]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_styles/normal = SubResource("header_baseline")
+
 [node name="Farm" type="Label" parent="Panel/Header" unique_id=1388602198]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_styles/normal = SubResource("header_baseline")
 
-[node name="Columns" type="HBoxContainer" parent="Panel"]
+[node name="Columns" type="HBoxContainer" parent="Panel" unique_id=1871268862]
 layout_mode = 0
 offset_left = 7.0
 offset_top = 17.0
 offset_right = 221.0
 offset_bottom = 25.0
 
-[node name="Name" type="Label" parent="Panel/Columns"]
+[node name="Name" type="Label" parent="Panel/Columns" unique_id=1797006211]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 0.6)
 theme_override_font_sizes/font_size = 7
 text = "NAME"
 
-[node name="Status" type="Label" parent="Panel/Columns"]
+[node name="Status" type="Label" parent="Panel/Columns" unique_id=1840210379]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 0.6)
 theme_override_font_sizes/font_size = 7
 text = "INFECTED?"
 
-[node name="Days" type="Label" parent="Panel/Columns"]
+[node name="Days" type="Label" parent="Panel/Columns" unique_id=1747716577]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 0.6)
 theme_override_font_sizes/font_size = 7
 text = "DAYS ON FARM"
 
-[node name="Actions" type="Label" parent="Panel/Columns"]
+[node name="Actions" type="Label" parent="Panel/Columns" unique_id=1743796573]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 0.6)
 theme_override_font_sizes/font_size = 7

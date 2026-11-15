@@ -36,25 +36,26 @@ else
 if food <= 5
 	% 
 		Luckily, {{name}} came back with much needed supplies
-		Enough for {{amount}} meals
-	% Thankfully, {{name}} is back with {{amount}} meals
+		Enough for {{amount}} meals and {{materials}} materials
+	% Thankfully, {{name}} is back with {{amount}} meals and {{materials}} materials
 	%
 		{{name}} is back from the hunt with some animal meat
 		You are not quite sure what it is, but the situation is dire
 else
-	%2 {{name}} came back from their journey with {{amount}} meals.
-	%2 {{name}} made it home unscathed, carrying {{amount}} meals.
+	%2 {{name}} came back from their journey with {{amount}} meals and {{materials}} materials
+	%2 {{name}} made it home unscathed, carrying {{amount}} meals and {{materials}} materials
 	%2 {{name}} 
 	%
 		{{name}} is back. The glimmer in their eyes is gone; the wilderness is not for everyone.
-		Luckily, the search was not fruitless. {{name}} brought the farm {{amount}} meals.
+		Luckily, the search was not fruitless. {{name}} brought the farm {{amount}} meals 
+		and {{materials}} materials
 	%
 		Seems the residents of the farm will be having a hearty meal.
-		{{name}} came back with {{amount}} meals.
+		{{name}} came back with {{amount}} meals and {{materials}} materials
 	%
 		{{name}} came back tonight. Around the dinner table, they told stories of the outside world.
 		It seems the disease is spreading with no end in sight.
-		Despite it all, they brought back enough food for {{amount}} meals.
+		Despite it all, they brought back enough food for {{amount}} meals and {{materials}} materials
 	%
 		{{name}} has arrived on the farm, dirt on their clothes.
 		They found a cattle farm not far away, the cattle roaming with no one to care for them.
