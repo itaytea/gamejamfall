@@ -208,6 +208,20 @@ It works. This nightmare is over.
 {{name}} was there when {{from}} fell. Now they're sick too.
 => END
 
+~ ration_needed
+There is not enough food to feed everyone. {{count}} resident(s) must go without.
+=> END
+
+~ bed_built
+{{name}} spent the night hammering and sawing. The farm now has an extra bed!
+% Working through the night, {{name}} managed to construct a new bed using the scavenged materials.
+=> END
+
+~ starved
+{{name}} went without food for too long and didn't make it through the night.
+% Weakened from hunger, {{name}} passed away.
+=> END
+
 # ---------------------------------------------------------------- Tattletale
 # After a theft or a fight nobody died in, someone may point a finger.
 # Half the time it's true, half the time it's the culprit lying. The culprit is always

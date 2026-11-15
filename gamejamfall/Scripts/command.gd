@@ -30,6 +30,7 @@ const TASK_NAMES := {
 	Resident.Task.RESEARCHER: "Research",
 	Resident.Task.LAB: "Lab",
 	Resident.Task.SYNTHESIZER: "Synth",
+	Resident.Task.BUILDER: "Build Bed",
 }
 
 @onready var _day: Label = $Panel/Header/Day
@@ -79,7 +80,7 @@ func _rebuild() -> void:
 func _refresh_header() -> void:
 	_day.text = "DAY %d" % GameState.day
 	_food.text = "FOOD %d > %d" % [GameState.meals, GameState.projected_meals()]
-	_farm.text = "%d/%d" % [GameState.residents.size(), Balance.MAX_RESIDENTS]
+	_farm.text = "%d/%d" % [GameState.residents.size(), GameState.max_residents]
 	_materials.text = "MATS %d" % GameState.materials   
 
 

@@ -43,6 +43,7 @@ var ration_short := 0                 # How many residents can't be fed tonight
 
 var _skip_admission := false          # Set when nobody guarded last night
 var _garden_yield_override := -1      # Set by events; -1 = normal yield
+var max_residents: int = 5
 
 # ================================================================
 # Run setup
@@ -50,6 +51,7 @@ func start_new_run() -> void:
 	day = 1
 	meals = 2
 	materials = 0
+	max_residents = 5
 	residents.clear()
 	visitors.clear()
 	events.clear()
@@ -122,8 +124,7 @@ func _set_stage(stage: Stage) -> void:
 # Each returns true if it happened, so the UI can react (shake, sound, dialogue).
 
 func is_farm_full() -> bool:
-	return residents.size() >= Balance.MAX_RESIDENTS
-
+	return residents.size() >= max_residents
 func can_test(r: Resident) -> bool:
 	return meals >= Balance.TEST_COST and r.can_be_tested()
 
@@ -173,7 +174,13 @@ func exile(r: Resident) -> bool:
 	residents.erase(r)
 	residents_changed.emit()
 	return true
-
+func can_build_bed() -> bool:
+	return materials >= 5
+func build_bed() -> void:
+	if not can_build_bed(): return
+	materials -= 5
+	max_residents += 1
+	residents_changed.emit()
 # ================================================================
 # Helpers for UI
 
@@ -193,6 +200,11 @@ func productive_gardeners() -> int:
 ## unlocked, and only one person at a time can hold each.
 func available_tasks(r: Resident) -> Array:
 	var tasks := [Resident.Task.IDLE, Resident.Task.GUARD, Resident.Task.GARDENER, Resident.Task.FORAGER, Resident.Task.RESEARCHER]
+	
+	# Only allow building if we have 5 materials and no one else is already building
+	if materials >= 5 and not _someone_else_on(Resident.Task.BUILDER, r):
+		tasks.append(Resident.Task.BUILDER)
+		
 	if research >= 100.0 and not has_chemicals and not _someone_else_on(Resident.Task.LAB, r):
 		tasks.append(Resident.Task.LAB)
 	if has_chemicals and not _someone_else_on(Resident.Task.SYNTHESIZER, r):
@@ -241,6 +253,16 @@ func _resolve_night() -> void:
 			research = minf(research + randf_range(Balance.RESEARCH_MIN, Balance.RESEARCH_MAX), 100.0)
 			_event("researched", {"name": r.name})
 		_event(_research_cue(was_done))
+	
+	# 2c. Builders: spend materials to build beds
+	var builders := residents.filter(func(r): return r.is_present() and r.task == Resident.Task.BUILDER)
+	if not builders.is_empty():
+		var b = builders[0]
+		if materials >= 5:
+			materials -= 5
+			max_residents += 1
+			_event("bed_built", {"name": b.name})
+			b.task = Resident.Task.IDLE # Kick them back to idle so they don't drain materials infinitely
 	
 	# 3. Travellers coming home. is_dead here reflects earlier nights, since the disease ticks below.
 	#    B: even healthy travellers can die on the road.
