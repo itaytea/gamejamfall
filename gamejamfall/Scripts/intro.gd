@@ -27,6 +27,7 @@ var _leaving := false
 
 func _ready() -> void:
 	_fade.color.a = 1.0
+	Music.play_intro()
 	for i in PARTS.size():
 		if _leaving: return
 		_background.texture = PARTS[i]

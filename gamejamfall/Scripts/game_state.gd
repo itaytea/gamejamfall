@@ -43,6 +43,7 @@ var ration_short := 0                 # How many residents can't be fed tonight
 
 var _skip_admission := false          # Set when nobody guarded last night
 var _garden_yield_override := -1      # Set by events; -1 = normal yield
+var _used_names: Array[String] = []  # Every name given out this run (visitors included)
 var _opening_night := false           # The run's first night: no random event, no thefts or fights
 var max_residents: int = 5
 
@@ -55,6 +56,7 @@ func start_new_run() -> void:
 	max_residents = 5
 	residents.clear()
 	visitors.clear()
+	_used_names.clear()
 	events.clear()
 	is_over = false
 	lose_reason = ""
@@ -413,9 +415,13 @@ func _finish_night(unfed: Array) -> void:
 		if not has_guard(): _event("no_guard")
 		_event("farm_full")
 		
-	# 9. No guard: people slip in overnight, and tomorrow's admission is skipped
+	# 9. No guard: people may slip in overnight (then tomorrow's admission is skipped)
 	elif not has_guard():
-		_forced_entry()
+		if randf() < Balance.NO_GUARD_ENTRY_CHANCE:
+			_forced_entry()
+		else:
+			_event("no_guard")
+			_event("nobody_came")
 
 
 # ================================================================
@@ -560,13 +566,17 @@ func _lose(event_type: String, reason: String) -> void:
 # ================================================================
 # Internals
 
-## Resident.random(), but rerolls the name so nobody shares one with someone here.
+## Resident.random() with a name nobody has had yet this run. Once every name
+## has been used, it falls back to one nobody currently here has.
 func _make_person(infect_chance: float) -> Resident:
 	var r := Resident.random(infect_chance)
-	var taken := (residents + visitors).map(func(p): return p.name)
-	for attempt in 10:
-		if r.name not in taken: break
-		r.name = Resident.NAMES.pick_random()
+	var here := (residents + visitors).map(func(p): return p.name)
+	var fresh := Resident.NAMES.filter(func(n): return n not in _used_names and n not in here)
+	if fresh.is_empty():
+		fresh = Resident.NAMES.filter(func(n): return n not in here)
+	if not fresh.is_empty():
+		r.name = fresh.pick_random()
+	_used_names.append(r.name)
 	return r
 
 func _event(type: String, data := {}) -> void:

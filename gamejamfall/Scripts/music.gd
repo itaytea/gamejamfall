@@ -13,6 +13,7 @@ extends Node
 ## - swells: day and night; after night SWELLS_SAFE_NIGHTS they stop if half or
 ##   more of the farm is infected or there's less food than mouths
 ## - winning brings every layer in
+## - the intro cutscene is the only time it's just bass loop + swells (play_intro)
 
 const STEMS := [
 	["bass_pad", "res://Music/ogg/bass_pad.ogg"],
@@ -31,6 +32,7 @@ const SWELLS_SAFE_NIGHTS := 10         # Swells can't drop out before this night
 const USE_HIDDEN_INFECTIONS := false
 
 const SILENT_DB := -60.0
+const INTRO_STEMS := ["bass_pad", "swells"]   # The intro's two layers
 
 var _player := AudioStreamPlayer.new()
 var _sync := AudioStreamSynchronized.new()
@@ -57,6 +59,13 @@ func _ready() -> void:
 	GameState.stage_changed.connect(_on_stage_changed)
 	GameState.game_over.connect(_on_game_over)
 	GameState.game_won.connect(_on_game_won)
+
+
+## Called by the intro cutscene: only the bass loop and swells. Everything else
+## stays silent; night 1 (the first stage) then brings the pads in and drops the bass.
+func play_intro() -> void:
+	for stem in _index:
+		_fade(stem, stem in INTRO_STEMS)
 
 
 func _on_stage_changed(stage: int) -> void:

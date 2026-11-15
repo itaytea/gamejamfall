@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dteg38rceiro8" path="res://Scripts/command.gd" id="1_cmd"]
 [ext_resource type="Texture2D" uid="uid://dnf5ayvj343kt" path="res://Sprites/background_command.png" id="2_bg"]
 [ext_resource type="Texture2D" uid="uid://bpc41mq3nbaa5" path="res://Sprites/base_name_textbox.png" id="3_textbox"]
+[ext_resource type="Script" path="res://Scripts/UI/spores.gd" id="4_spores"]
 
 [sub_resource type="StyleBoxFlat" id="btn_disabled"]
 content_margin_left = 2.0
@@ -179,3 +180,10 @@ offset_top = 111.0
 offset_right = 221.0
 offset_bottom = 124.0
 text = "END DAY"
+
+[node name="Spores" type="Control" parent="."]
+layout_mode = 0
+offset_right = 240.0
+offset_bottom = 135.0
+mouse_filter = 2
+script = ExtResource("4_spores")

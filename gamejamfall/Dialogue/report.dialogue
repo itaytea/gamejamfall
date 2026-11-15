@@ -92,6 +92,12 @@ Everyone was fed. {{amount}} meals gone, {{left}} left.
 No one kept watch last night.
 => END
 
+~ nobody_came
+% Luckily, no one came to the fence.
+% The night passed quietly. Nobody tried to get in.
+% Nobody came. This time.
+=> END
+
 ~ farm_full
 The farm is full. No one else can be let in.
 => END
