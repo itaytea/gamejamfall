@@ -195,19 +195,3 @@ It works. This nightmare is over.
 % {{accuser}} insists {{accused}} started the fight.
 % {{accuser}} says it was all {{accused}}'s doing.
 => END
-
-# ---------------------------------------------------------------- Rationing
-# ration_needed: plays just before the player picks who goes without. {{count}} = how many.
-~ ration_needed
-There isn't enough food for everyone tonight.
-if count == 1
-	Someone will have to go without.
-else
-	{{count}} people will have to go without.
-=> END
-
-# starved: {{name}} was picked to go without, and starved.
-~ starved
-% {{name}} went without food tonight. They didn't survive it.
-% {{name}} gave up their share. They didn't wake up.
-=> END
