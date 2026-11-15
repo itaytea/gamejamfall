@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cwikpae3f0ajf"
+path="res://.godot/imported/homerotsoundtrack Swells.wav-7b94e30dec0d69c5e3aaa7d5da60dadc.sample"
+
+[deps]
+
+source_file="res://Music/homerotsoundtrack Swells.wav"
+dest_files=["res://.godot/imported/homerotsoundtrack Swells.wav-7b94e30dec0d69c5e3aaa7d5da60dadc.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

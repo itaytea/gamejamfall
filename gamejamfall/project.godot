@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 GameState="*uid://bxrbyj3vp6e1g"
+Music="*res://Scripts/music.gd"
+Cursor="*res://Scripts/cursor.gd"
 
 [display]
 
@@ -35,7 +37,7 @@ enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")
 
 [gui]
 
-theme/custom_font="uid://cnxl5kaveci5n"
+theme/custom_font="uid://bp3bq6s7hkula"
 
 [input]
 

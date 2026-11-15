@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://12og30m0xtsb"
+path="res://.godot/imported/homerotsoundtrack Bass.wav-06f59681b5ec6f910d403a2443b9e7d0.sample"
+
+[deps]
+
+source_file="res://Music/homerotsoundtrack Bass.wav"
+dest_files=["res://.godot/imported/homerotsoundtrack Bass.wav-06f59681b5ec6f910d403a2443b9e7d0.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

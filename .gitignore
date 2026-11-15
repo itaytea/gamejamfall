@@ -1,1 +1,4 @@
 .DS_Store
+
+# Ableton analysis files
+*.asd

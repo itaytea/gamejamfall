@@ -12,15 +12,16 @@
 	Temperatures on the plot fell below zero,
 	{{name}} could only come up with {{amount}} meals
 % {{name}} didn't make an effort to irrigate the plot properly
-% 
+%
 	{{name}} tripped and fell while working the plot
 	they only managed to produce {{amount}} meals tonight
-% {{name}} spotted a scarecrow eating away at vegtables at the plot
-% 
-	{{name}} reported newly grown vegtables present a weird color
+% {{name}} spotted a scarecrow eating away at vegetables at the plot
+%
+	{{name}} reported newly grown vegetables present a weird color
 	unsure if they are edible, they threw this night's batch out
 => END
 
+# garden: {{amount}} = meals made, {{gardeners}} = how many worked the plots, {{name}} = one of them.
 ~ garden
 if gardeners == 1
 	% The garden gave {{amount}} meals.
@@ -29,12 +30,13 @@ if gardeners == 1
 else
 	% The garden gave {{amount}} meals.
 	% {{gardeners}} gardeners brought in {{amount}} meals.
-	% {{gardeners}} worked toghther to produce {{amount}} meals tonight
+	% {{gardeners}} worked together to produce {{amount}} meals tonight
 => END
 
+# forager_returned: {{name}}, {{amount}} = meals, {{materials}} = materials, {{food}} = pantry after their haul (before dinner).
 ~ forager_returned
 if food <= 5
-	% 
+	%
 		Luckily, {{name}} came back with much needed supplies
 		Enough for {{amount}} meals and {{materials}} materials
 	% Thankfully, {{name}} is back with {{amount}} meals and {{materials}} materials
@@ -44,11 +46,9 @@ if food <= 5
 else
 	%2 {{name}} came back from their journey with {{amount}} meals and {{materials}} materials
 	%2 {{name}} made it home unscathed, carrying {{amount}} meals and {{materials}} materials
-	%2 {{name}} 
 	%
 		{{name}} is back. The glimmer in their eyes is gone; the wilderness is not for everyone.
-		Luckily, the search was not fruitless. {{name}} brought the farm {{amount}} meals 
-		and {{materials}} materials
+		Luckily, the search was not fruitless. {{name}} brought the farm {{amount}} meals and {{materials}} materials.
 	%
 		Seems the residents of the farm will be having a hearty meal.
 		{{name}} came back with {{amount}} meals and {{materials}} materials
@@ -83,7 +83,7 @@ Everyone was fed. {{amount}} meals gone, {{left}} left.
 ~ infected
 % {{name}} was by {{from}}'s side at the end. Now they're sick too.
 % {{name}} has the same cough {{from}} had.
-% 
+%
 	{{from}}'s body was found by {{name}}
 	{{name}}'s eyes have become yellow
 => END
@@ -98,9 +98,9 @@ The farm is full. No one else can be let in.
 
 ~ slipped_in
 % {{name}} slipped in while everyone slept.
-% 
+%
 	Through a hole in the electric fence, a new resident has entered
-	{{name}} has apologized for the damagem, promising to work on the farm
+	{{name}} has apologized for the damage, promising to work on the farm
 %
 	A new person appeared on the farm.
 	{{name}} somehow climbed the electric fence, with bruised hands to show for it
@@ -223,4 +223,20 @@ It works. This nightmare is over.
 ~ tattle_fight
 % {{accuser}} insists {{accused}} started the fight.
 % {{accuser}} says it was all {{accused}}'s doing.
+=> END
+
+# ---------------------------------------------------------------- Rationing
+# ration_needed: plays just before the player picks who goes without. {{count}} = how many.
+~ ration_needed
+There isn't enough food for everyone tonight.
+if count == 1
+	Someone will have to go without.
+else
+	{{count}} people will have to go without.
+=> END
+
+# starved: {{name}} was picked to go without, and starved.
+~ starved
+% {{name}} went without food tonight. They didn't survive it.
+% {{name}} gave up their share. They didn't wake up.
 => END

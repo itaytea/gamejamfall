@@ -231,7 +231,9 @@ func _resolve_night() -> void:
 	var gardeners := productive_gardeners()
 	if gardeners > 0:
 		meals += gardeners * yield_per
-		_event("garden", {"gardeners": gardeners, "amount": gardeners * yield_per})
+		# name: one of tonight's gardeners (the only one, if gardeners == 1)
+		var working := residents.filter(func(r): return r.is_present() and r.task == Resident.Task.GARDENER)
+		_event("garden", {"gardeners": gardeners, "amount": gardeners * yield_per, "name": working.pick_random().name})
 		
 	# 2b. Research: each researcher adds a hidden random amount. A line per researcher, then how it feels.
 	var researchers := residents.filter(func(r): return r.is_present() and r.task == Resident.Task.RESEARCHER)
