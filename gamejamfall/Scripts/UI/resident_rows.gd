@@ -9,6 +9,7 @@ const COLOR_CLEAR := Color(0.18, 0.42, 0.22)
 const COLOR_INFECTED := Color(0.62, 0.16, 0.14)
 const COLOR_INCONCLUSIVE := Color(0.62, 0.45, 0.10)
 
+const DRIP_LABEL := preload("res://Scripts/UI/drip_label.gd")
 const ROW_HEIGHT := 11
 const FONT_SIZE := 8
 
@@ -31,6 +32,8 @@ static func columns(texts: Array, widths: Array) -> HBoxContainer:
 	cols.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for i in texts.size():
 		var l := Label.new()
+		if i == 1:
+			l.set_script(DRIP_LABEL)                # Status column: "Infected" drips
 		l.text = texts[i]
 		l.custom_minimum_size.x = widths[i]
 		l.size_flags_vertical = Control.SIZE_SHRINK_CENTER

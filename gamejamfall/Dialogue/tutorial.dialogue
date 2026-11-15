@@ -1,0 +1,42 @@
+# One-time tutorial tips. Each tip shows the first time its moment comes up
+# (once per game session), in a box over the screen. Click to go through the lines.
+# Keep each line under ~110 characters. Every cue must end with => END.
+
+~ tip_night
+Every night, this report tells you what happened on the farm.
+Click to read on.
+=> END
+
+~ tip_door
+Visitors come to your door each morning. You can choose to admit or deny them from the farm
+They might be infected, so test them if you can (-1 meals)
+Remember: individuals who are infected will day 3 days from the moment of infection
+=> END
+
+~ tip_command
+You can give people jobs on the farm, click on a job to cycle through the list
+GUARD keeps strangers out. GARDEN grows food. FORAGE is a 2-night trip for food and materials.
+RESEARCH works toward a cure. 
+T tests a resident and X exiles them. Each costs 1 meal.
+=> END
+
+~ tip_infected
+Someone on your farm is infected. They will die within three nights, and the rot will spread when they do.
+=> END
+
+~ tip_no_guard
+If there's no guard stationed, people might slip in
+=> END
+
+~ tip_beds
+You have enough materials to build a bed. 
+Delegate someone to BUILD BED to make room for one more resident.
+=> END
+
+~ tip_lab
+To get the chemicals, set one resident's job to LAB. The trip takes 4 nights.
+=> END
+
+~ tip_synth
+You have the chemicals. Set someone to SYNTH to make the cure.
+=> END

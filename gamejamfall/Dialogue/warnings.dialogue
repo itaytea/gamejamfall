@@ -6,7 +6,7 @@
 # Write a colon as \: (a plain "word:" at the start would be read as a speaker's name).
 
 ~ not_enough_food
-Not everyone is guranteed to be fed!
+Not everyone is guaranteed to be fed!
 => END
 
 ~ no_guard

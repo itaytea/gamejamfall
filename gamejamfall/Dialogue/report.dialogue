@@ -114,10 +114,19 @@ The farm is full. No one else can be let in.
 
 ~ lost_starved
 The last of the food is gone.
+One by one, the residents of the house dropped dead, exhausted from hunger
+Take comfort in the fact you were never likely to survive at all...
+The rot takes you, one way or another.
 => END
 
 ~ lost_alone
 You are the only one left.
+By yourself, you can't possibly maintain the farm.
+Soon enough, the rot came for you...
+Through the air you breathe or the water you drink, who's to say.
+By the time you realized, it was too late to do anything about it.
+Take comfort in the fact you were never likely to survive at all...
+The rot takes you, one way or another.
 => END
 
 # ---------------------------------------------------------------- Cure
@@ -194,7 +203,12 @@ The work on the cure was interrupted. It will have to start over.
 
 ~ cure_done
 {{name}} finished the cure.
-It works. This nightmare is over.
+{{name}} decided it's only right it will be tested on them
+Quaratining themselves, {{name}} ingested the fungi as well as the new compound
+The residents of the farm waited anxiously. 
+...
+The morning after the third night, {{name}} emerged. With no signs of sickness.
+You are safe.
 => END
 
 # ---------------------------------------------------------------- Hidden attributes

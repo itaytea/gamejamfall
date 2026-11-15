@@ -16,7 +16,7 @@ const NAMES := ["Itay", "Darinah", "Sam", "Keira", "Cameron", "Joan", "Iwa",
 "Micheal", "Severino", "Arman", "Joey", "Owen", "Casper",
 "Chloe", "Ash", "Noelle", "Anthony", "James", "Williamson", "Marcus", "Justin",
 "Kiran", "Meg", "Lina", "Annaliese", "Christian", "Jensen", "Alice", "Tina", "Ronan", "Rachel",
-"Finn", "Will", "Emma"]
+"Finn", "Will", "Emma", "James", "Deirdre"]
 
 # -- resident specific values --
 
@@ -28,6 +28,7 @@ var clothes_id: int
 var face_id: int
 var hair_id: int
 var dialogue_id: int
+var voice: int          # Tone of voice for their text blips at the door: 0 low, 1 medium, 2 high
 #sickness - hidden variables
 var is_infected := false
 var days_until_death:= -1 #-1 if healthy
@@ -48,6 +49,7 @@ static func random(infect_chance: float) -> Resident:
 	var r := Resident.new()
 	r.name = NAMES.pick_random()
 	r.dialogue_id = Balance.pick_dialogue_set()
+	r.voice = randi() % 3
 	r.portrait_id = randi() % Balance.PORTRAIT_COUNT
 	r.base_id = randi() % Balance.BASE_COUNT
 	r.clothes_id = randi() % Balance.CLOTHES_COUNT
