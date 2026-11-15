@@ -5,7 +5,7 @@ extends RefCounted
 
 #status on farm
 enum Status {UNKNOWN, INCONCLUSIVE, POSITIVE, NEGATIVE}
-enum Task { IDLE, GUARD, GARDENER, FORAGER }
+enum Task { IDLE, GUARD, GARDENER, FORAGER, RESEARCHER, LAB, SYNTHESIZER }
 
 #possible names: waiting on sam to make list
 const NAMES := ["Itay", "Darinah", "Sam", "Keira", "Cameron", "Joan", "Iwa", "August", "Kier", "Harini", "Breanna", "Kailey", "Audrey", "Claire", "Jared"]
@@ -92,7 +92,7 @@ func set_task(new_task: Task) -> void:
 #foragers leave when the day ends (GameState calls this), so the player can change their mind until then
 func depart() -> void:
 	is_away = true
-	forage_days_left = Balance.FORAGE_DAYS
+	forage_days_left = Balance.LAB_DAYS if task == Task.LAB else Balance.FORAGE_DAYS
 	#they might catch it out there; unlike infect(), the player isn't told
 	if not is_infected and randf() < Balance.ROAD_INFECT_CHANCE:
 		is_infected = true

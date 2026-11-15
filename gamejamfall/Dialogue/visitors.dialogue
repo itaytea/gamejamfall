@@ -49,3 +49,49 @@
 ~ v2_rejected
 {{name}}: I understand, I wish you the best of luck
 => END
+
+~ v3_greet
+{{name}}: I've been traveling for days, feels like walking in cirlces
+{{name}}: Would you be so kind as to let me in?
+
+~ v3_tested
+{{name}}: If it gives you the peace of mind...
+
+~ v3_rejected
+{{name}}: ...
+{{name}}: Pehaps the stars will guide me tonight
+=> END
+
+~ v4_greet
+{{name}}: Those woods will trick'ya, eh?
+{{name}}: If you're not careful, you might find yourself walking in circles
+{{name}}: Listen, I'm very tired. Would 'preciate if u gave me a bed
+{{name}}: Whaddaya say? eh?
+
+~ v4_tested
+{{name}}: Can't be too careful, eh?
+
+~ v4_rejected
+{{name}}: That's too bad, eh?
+{{name}}: Ya have a nice day!
+=> END
+
+~ v5_greet
+{{name}}: Dudeeee, im sooo tired
+{{name}}: *yawnnnnnnn*
+{{name}}: Waddaya say bro, lemme in? I make some killer brownies
+
+~ v5_tested
+{{name}}: Chilllllllll
+
+~ v5_rejected
+{{name}}: Brooooooooo, u gotta get a chill on for real
+=> END
+# any beds? any food?
+# are there other people here?
+# have u seen this person around here?
+# i am looking for my __ (mom, son)
+# i am on the run
+# seductive person (hey sugar)
+# frat bro
+# 

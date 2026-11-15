@@ -84,3 +84,68 @@ The last of the food is gone.
 ~ lost_alone
 You are the only one left.
 => END
+
+# ---------------------------------------------------------------- Cure
+# researched: one random line per researcher, every night they research.
+# research_0/25/50/75: how it feels, played after the researched lines every research night.
+# research_breakthrough: the night research first reaches 100%.
+# research_ready: any later night someone still researches.
+
+~ researched
+% {{name}} spent the night buried in old textbooks.
+% {{name}} stayed up scribbling notes by candlelight.
+% {{name}} pored over medical journals until dawn.
+% {{name}} ran another round of experiments in the shed.
+=> END
+
+~ research_0
+You feel lost in the material, swarmed with no understanding in sight.
+=> END
+
+~ research_25
+You feel like you’ve come to grasp the basics of chemistry and human biology.
+However, you’re far from finding a cure.
+=> END
+
+~ research_50
+You are starting to feel more confident in your knowledge.
+An end might be in sight.
+=> END
+
+~ research_75
+It’s only a matter of weeks before you reach a breakthrough.
+You are starting to feel hope.
+=> END
+
+~ research_breakthrough
+BREAKTHROUGH! You have the knowledge on how to synthesize the cure!
+You can now send one of your residents to acquire the correct chemicals from the old EPA building.
+A trip back and forth will take 4 days, and is very dangerous.
+But a successful one will end this nightmare.
+=> END
+
+~ research_ready
+You can now send one of your residents to acquire chemicals for the cure.
+=> END
+
+~ lab_returned
+{{name}} made it back from the old EPA building with the chemicals!
+=> END
+
+~ lab_lost
+{{name}} never came back from the EPA building.
+=> END
+
+# synthesizing: {{nights}} done so far out of {{total}}.
+~ synthesizing
+{{name}} worked on the cure through the night. ({{nights}}/{{total}})
+=> END
+
+~ synthesis_interrupted
+The work on the cure was interrupted. It will have to start over.
+=> END
+
+~ cure_done
+{{name}} finished the cure.
+It works. This nightmare is over.
+=> END

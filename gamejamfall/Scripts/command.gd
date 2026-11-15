@@ -1,6 +1,7 @@
 extends Control
 ## Command stage: see every resident, give them a task, exile people, end the day.
-## - Click a task to cycle Idle > Guard > Garden > Forage (right-click goes backwards).
+## - Click a task to cycle Idle > Guard > Garden > Forage > Research (> Lab > Synth once unlocked).
+##   Right-click goes backwards.
 ## - Foragers leave when you press End Day, so you can change your mind until then.
 ## - T tests a resident (costs a meal). Anyone but known-infected can be retested.
 ## - Exile costs a meal: click X once to arm it (shows ?), click again to confirm.
@@ -13,18 +14,29 @@ const COLOR_INCONCLUSIVE := Color(0.62, 0.45, 0.10)
 const COLOR_WARNING := Color(0.62, 0.16, 0.14)
 const WARNINGS: DialogueResource = preload("res://Dialogue/warnings.dialogue")
 
-const TASK_ORDER := [Resident.Task.IDLE, Resident.Task.GUARD, Resident.Task.GARDENER, Resident.Task.FORAGER]
+# Column widths, shared by the header row and every resident row so they line up
+const COL_NAME := 46
+const COL_STATUS := 50
+const COL_DAYS := 34
+const COL_TASK := 44
+const COL_BUTTON := 12
+const COL_GAP := 3
+
 const TASK_NAMES := {
 	Resident.Task.IDLE: "Idle",
 	Resident.Task.GUARD: "Guard",
 	Resident.Task.GARDENER: "Garden",
 	Resident.Task.FORAGER: "Forage",
+	Resident.Task.RESEARCHER: "Research",
+	Resident.Task.LAB: "Lab",
+	Resident.Task.SYNTHESIZER: "Synth",
 }
 
 @onready var _day: Label = $Panel/Header/Day
 @onready var _food: Label = $Panel/Header/Food
 @onready var _farm: Label = $Panel/Header/Farm
 @onready var _rows: VBoxContainer = $Panel/Rows
+@onready var _columns: HBoxContainer = $Panel/Columns
 @onready var _warning: Label = $Panel/Warning
 @onready var _end_day: Button = $Panel/EndDay
 
@@ -35,6 +47,11 @@ var _warning_token := 0            # Ignores slow warning lookups that a newer r
 
 func _ready() -> void:
 	_end_day.pressed.connect(GameState.end_stage)
+	_columns.add_theme_constant_override("separation", COL_GAP)
+	$Panel/Columns/Name.custom_minimum_size.x = COL_NAME
+	$Panel/Columns/Status.custom_minimum_size.x = COL_STATUS
+	$Panel/Columns/Days.custom_minimum_size.x = COL_DAYS
+	$Panel/Columns/Actions.custom_minimum_size.x = COL_TASK + 2 * (COL_BUTTON + COL_GAP)
 	GameState.residents_changed.connect(_queue_rebuild)
 	GameState.meals_changed.connect(_queue_rebuild.unbind(1))
 	_rebuild()
@@ -95,29 +112,23 @@ func _refresh_warning() -> void:
 
 func _make_row(r: Resident) -> HBoxContainer:
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 3)
+	row.add_theme_constant_override("separation", COL_GAP)
 
-	var name_label := _label(r.name, 52)
+	var name_label := _label(r.name, COL_NAME)
 	name_label.clip_text = true
 	row.add_child(name_label)
 
-	var status := _label(r.status_text(), 46)
+	var status := _label(r.status_text(), COL_STATUS)
 	status.add_theme_color_override("font_color", _status_color(r))
 	row.add_child(status)
 
-	row.add_child(_label("%dd" % r.days_on_farm, 16))
+	row.add_child(_label(str(r.days_on_farm), COL_DAYS))
 
-	var test := Button.new()
-	test.custom_minimum_size = Vector2(12, 0)
-	test.text = "T"
-	test.disabled = not GameState.can_test_resident(r)
-	test.pressed.connect(_on_test.bind(r))
-	row.add_child(test)
-
+	# Actions: task toggle, then test, then exile
 	var task := Button.new()
-	task.custom_minimum_size = Vector2(48, 0)
+	task.custom_minimum_size = Vector2(COL_TASK, 0)
 	if r.is_away:
-		task.text = "Away %d" % r.forage_days_left
+		task.text = ("Lab %d" if r.task == Resident.Task.LAB else "Away %d") % r.forage_days_left
 		task.disabled = true
 	else:
 		task.text = TASK_NAMES[r.task]
@@ -125,8 +136,15 @@ func _make_row(r: Resident) -> HBoxContainer:
 		task.gui_input.connect(_on_task_gui_input.bind(r))
 	row.add_child(task)
 
+	var test := Button.new()
+	test.custom_minimum_size = Vector2(COL_BUTTON, 0)
+	test.text = "T"
+	test.disabled = not GameState.can_test_resident(r)
+	test.pressed.connect(_on_test.bind(r))
+	row.add_child(test)
+
 	var exile := Button.new()
-	exile.custom_minimum_size = Vector2(12, 0)
+	exile.custom_minimum_size = Vector2(COL_BUTTON, 0)
 	exile.text = "?" if _exile_armed == r else "X"
 	exile.disabled = not GameState.can_exile(r)
 	exile.pressed.connect(_on_exile.bind(r))
@@ -156,8 +174,9 @@ func _on_test(r: Resident) -> void:
 
 func _cycle_task(r: Resident, direction: int) -> void:
 	_exile_armed = null
-	var i := TASK_ORDER.find(r.task)
-	GameState.assign_task(r, TASK_ORDER[(i + direction + TASK_ORDER.size()) % TASK_ORDER.size()])
+	var tasks := GameState.available_tasks(r)   # Lab and Synth only once unlocked
+	var i := tasks.find(r.task)
+	GameState.assign_task(r, tasks[(i + direction + tasks.size()) % tasks.size()])
 
 
 func _on_task_gui_input(event: InputEvent, r: Resident) -> void:

@@ -8,6 +8,7 @@ signal visitors_changed
 signal stage_changed(stage: Stage)
 signal day_advanced(day: int)
 signal game_over(reason: String, days_survived: int)
+signal game_won(day: int)
 
 var day := 1
 var meals := 0:
@@ -21,6 +22,13 @@ var current_stage: Stage = Stage.COMMAND
 var events: Array[Dictionary] = []    # Tonight's events, in order. Each has a "type" key.
 var is_over := false
 var lose_reason := ""
+
+# Cure
+var research := 0.0                   # Hidden from the player: 0-100
+var has_chemicals := false            # Brought back from the lab
+var synth_nights := 0                 # Nights in a row the same person has synthesized
+var is_won := false
+var _synth_resident: Resident = null
 
 var _skip_admission := false          # Set when nobody guarded last night
 var _garden_yield_override := -1      # Set by events; -1 = normal yield
@@ -37,6 +45,11 @@ func start_new_run() -> void:
 	is_over = false
 	lose_reason = ""
 	_skip_admission = false
+	research = 0.0
+	has_chemicals = false
+	synth_nights = 0
+	is_won = false
+	_synth_resident = null
 	for i in 2:
 		var r := _make_person(0.0)                 # Guaranteed healthy...
 		r.known_status = Resident.Status.NEGATIVE  # ...and the player knows it
@@ -60,7 +73,9 @@ func end_stage() -> void:
 			_resolve_night()
 			_set_stage(Stage.CONSEQUENCES)   # The report plays even on a loss
 		Stage.CONSEQUENCES:
-			if is_over:
+			if is_won:
+				game_won.emit(day)
+			elif is_over:
 				game_over.emit(lose_reason, day)
 			else:
 				_start_day()
@@ -172,13 +187,29 @@ func productive_gardeners() -> int:
 	return mini(gardeners, Balance.GARDEN_PLOTS)
 
 
+## Tasks this resident can be given right now. Lab and Synthesize only appear once
+## unlocked, and only one person at a time can hold each.
+func available_tasks(r: Resident) -> Array:
+	var tasks := [Resident.Task.IDLE, Resident.Task.GUARD, Resident.Task.GARDENER,
+		Resident.Task.FORAGER, Resident.Task.RESEARCHER]
+	if research >= 100.0 and not has_chemicals and not _someone_else_on(Resident.Task.LAB, r):
+		tasks.append(Resident.Task.LAB)
+	if has_chemicals and not _someone_else_on(Resident.Task.SYNTHESIZER, r):
+		tasks.append(Resident.Task.SYNTHESIZER)
+	return tasks
+
+
+func _someone_else_on(task: Resident.Task, r: Resident) -> bool:
+	return residents.any(func(o): return o != r and o.task == task)
+
+
 func has_guard() -> bool:
 	return residents.any(func(r): return r.is_present() and r.task == Resident.Task.GUARD)
 
 
 ## Guaranteed food tomorrow morning: gardens minus mouths. Ignores foragers and events.
 func projected_meals() -> int:
-	var leaving := residents.filter(func(r): return r.is_present() and r.task == Resident.Task.FORAGER).size()
+	var leaving := residents.filter(func(r): return r.is_present() and _is_trip(r.task)).size()
 	var mouths := present_residents().size() - leaving + 1
 	return meals + productive_gardeners() * Balance.GARDEN_YIELD - mouths * Balance.MEALS_PER_PERSON
 
@@ -188,9 +219,9 @@ func projected_meals() -> int:
 func _resolve_night() -> void:
 	events.clear()
 
-	# 0. Anyone assigned to forage sets off now (they don't eat at home tonight)
+	# 0. Foragers and the lab-goer set off now (they don't eat at home tonight)
 	for r in residents:
-		if r.is_present() and r.task == Resident.Task.FORAGER:
+		if r.is_present() and _is_trip(r.task):
 			r.depart()
 
 	# 1. Random event (may modify the steps below)
@@ -203,13 +234,28 @@ func _resolve_night() -> void:
 		meals += gardeners * yield_per
 		_event("garden", {"gardeners": gardeners, "amount": gardeners * yield_per})
 
-	# 3. Foragers. is_dead here reflects earlier nights, since the disease ticks below.
-	#    B: even healthy foragers can die on the road.
+	# 2b. Research: each researcher adds a hidden random amount. A line per researcher, then how it feels.
+	var researchers := residents.filter(func(r): return r.is_present() and r.task == Resident.Task.RESEARCHER)
+	if not researchers.is_empty():
+		var was_done := research >= 100.0
+		for r in researchers:
+			research = minf(research + randf_range(Balance.RESEARCH_MIN, Balance.RESEARCH_MAX), 100.0)
+			_event("researched", {"name": r.name})
+		_event(_research_cue(was_done))
+
+	# 3. Travellers coming home. is_dead here reflects earlier nights, since the disease ticks below.
+	#    B: even healthy travellers can die on the road.
 	for r in residents.duplicate():
 		if r.is_away and r.tick_forage():
-			if r.is_dead or randf() < Balance.FORAGE_DEATH_CHANCE:
+			var is_lab: bool = r.task == Resident.Task.LAB
+			var death_chance := Balance.LAB_DEATH_CHANCE if is_lab else Balance.FORAGE_DEATH_CHANCE
+			if r.is_dead or randf() < death_chance:
 				residents.erase(r)
-				_event("forager_lost", {"name": r.name})
+				_event("lab_lost" if is_lab else "forager_lost", {"name": r.name})
+			elif is_lab:
+				has_chemicals = true
+				r.return_home()
+				_event("lab_returned", {"name": r.name})
 			else:
 				var found := randi_range(Balance.FORAGE_MIN, Balance.FORAGE_MAX)
 				meals += found
@@ -242,6 +288,32 @@ func _resolve_night() -> void:
 		if r.is_present():
 			r.days_on_farm += 1
 
+	# 6b. Synthesis: the same person, SYNTH_NIGHTS nights in a row, surviving each night.
+	#     Anyone who died tonight is already gone, so their night doesn't count.
+	var synth: Resident = null
+	for r in residents:
+		if r.is_present() and r.task == Resident.Task.SYNTHESIZER:
+			synth = r
+			break
+	if has_chemicals and synth != null:
+		if synth != _synth_resident:
+			if synth_nights > 0:
+				_event("synthesis_interrupted")
+			synth_nights = 0
+			_synth_resident = synth
+		synth_nights += 1
+		_event("synthesizing", {"name": synth.name, "nights": synth_nights, "total": Balance.SYNTH_NIGHTS})
+		if synth_nights >= Balance.SYNTH_NIGHTS:
+			is_won = true
+			_event("cure_done", {"name": synth.name})
+			residents_changed.emit()
+			return
+	else:
+		if synth_nights > 0:
+			_event("synthesis_interrupted")
+		synth_nights = 0
+		_synth_resident = null
+
 	residents_changed.emit()
 
 	# 7. Lose checks. game_over is emitted after the report plays (see end_stage).
@@ -261,6 +333,23 @@ func _resolve_night() -> void:
 	# 9. No guard: people slip in overnight, and tomorrow's admission is skipped
 	elif not has_guard():
 		_forced_entry()
+
+
+func _is_trip(task: Resident.Task) -> bool:
+	return task == Resident.Task.FORAGER or task == Resident.Task.LAB
+
+
+## Which progress message plays after tonight's research.
+func _research_cue(was_done: bool) -> String:
+	if research >= 100.0:
+		return "research_ready" if was_done else "research_breakthrough"
+	if research >= 75.0:
+		return "research_75"
+	if research >= 50.0:
+		return "research_50"
+	if research >= 25.0:
+		return "research_25"
+	return "research_0"
 
 
 func _roll_event() -> void:

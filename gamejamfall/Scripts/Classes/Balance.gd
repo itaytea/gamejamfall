@@ -3,7 +3,7 @@ extends RefCounted
 
 #character randomization
 const PORTRAIT_COUNT := 1
-const DIALOGUE_SET_COUNT := 3
+const DIALOGUE_SET_COUNT := 6
 
 #
 const FORAGE_DAYS := 2
@@ -32,3 +32,10 @@ const VISITORS_MIN := 1
 const VISITORS_MAX := 2
 const INFECT_CHANCE_CAP := 0.9
 const EVENT_CHANCE := 0.3
+
+#cure
+const RESEARCH_MIN := 6.0                    # research % gained per researcher per night (random in this range)
+const RESEARCH_MAX := 10.0
+const LAB_DAYS := 4                          # trip to the old EPA building, there and back
+const LAB_DEATH_CHANCE := 0.25               # chance the lab-goer dies on the road (plus road infection, like foragers)
+const SYNTH_NIGHTS := 3                      # nights in a row one person must synthesize (and survive) to win

@@ -11,6 +11,7 @@ var _scenes := {
 	GameState.Stage.CONSEQUENCES: preload("res://Scenes/Consequences.tscn"),
 }
 var _game_over_scene := preload("res://Scenes/Placeholders/game_over_placeholder.tscn")
+var _win_scene := preload("res://Scenes/Win.tscn")
 var _current: Node
 
 
@@ -18,6 +19,7 @@ func _ready() -> void:
 	# Connect BEFORE starting the run, or the first stage_changed is missed
 	GameState.stage_changed.connect(_on_stage_changed)
 	GameState.game_over.connect(_on_game_over)
+	GameState.game_won.connect(_on_game_won)
 	GameState.start_new_run()
 
 
@@ -27,6 +29,10 @@ func _on_stage_changed(stage: int) -> void:
 
 func _on_game_over(_reason: String, _days: int) -> void:
 	_show(_game_over_scene.instantiate())
+
+
+func _on_game_won(_day: int) -> void:
+	_show(_win_scene.instantiate())
 
 
 func _show(scene: Node) -> void:

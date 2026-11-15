@@ -112,10 +112,41 @@ size_flags_vertical = 8
 layout_mode = 2
 size_flags_vertical = 8
 
+[node name="Columns" type="HBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 17.0
+offset_right = 221.0
+offset_bottom = 25.0
+
+[node name="Name" type="Label" parent="Panel/Columns"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 0.6)
+theme_override_font_sizes/font_size = 7
+text = "NAME"
+
+[node name="Status" type="Label" parent="Panel/Columns"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 0.6)
+theme_override_font_sizes/font_size = 7
+text = "INFECTED?"
+
+[node name="Days" type="Label" parent="Panel/Columns"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 0.6)
+theme_override_font_sizes/font_size = 7
+text = "DAYS ON FARM"
+
+[node name="Actions" type="Label" parent="Panel/Columns"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 0.6)
+theme_override_font_sizes/font_size = 7
+text = "ACTIONS"
+
 [node name="Rows" type="VBoxContainer" parent="Panel" unique_id=1310381842]
 layout_mode = 0
 offset_left = 7.0
-offset_top = 18.0
+offset_top = 25.0
 offset_right = 221.0
 offset_bottom = 110.0
 theme_override_constants/separation = 0
