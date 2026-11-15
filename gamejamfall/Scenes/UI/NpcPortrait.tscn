@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/UI/npc_portrait.gd" id="1_portrait"]
+
+[node name="NpcPortrait" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 90.0
+offset_bottom = 110.0
+mouse_filter = 2
+script = ExtResource("1_portrait")
+
+[node name="Shadow" type="CanvasGroup" parent="."]
+self_modulate = Color(0, 0, 0, 0.65)
+position = Vector2(3, 1)
+
+[node name="Base" type="Sprite2D" parent="Shadow"]
+centered = false
+
+[node name="Face" type="Sprite2D" parent="Shadow"]
+centered = false
+
+[node name="Clothes" type="Sprite2D" parent="Shadow"]
+centered = false
+
+[node name="Hair" type="Sprite2D" parent="Shadow"]
+centered = false
+
+[node name="Body" type="Node2D" parent="."]
+
+[node name="Base" type="Sprite2D" parent="Body"]
+centered = false
+
+[node name="Face" type="Sprite2D" parent="Body"]
+centered = false
+
+[node name="Clothes" type="Sprite2D" parent="Body"]
+centered = false
+
+[node name="Hair" type="Sprite2D" parent="Body"]
+centered = false

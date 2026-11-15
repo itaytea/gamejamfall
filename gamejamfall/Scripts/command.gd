@@ -174,8 +174,8 @@ func _on_test(r: Resident) -> void:
 
 func _cycle_task(r: Resident, direction: int) -> void:
 	_exile_armed = null
-	var tasks := GameState.available_tasks(r)   # Lab and Synth only once unlocked
-	var i := tasks.find(r.task)
+	var tasks: Array = GameState.available_tasks(r)   # Lab and Synth only once unlocked
+	var i: int = tasks.find(r.task)
 	GameState.assign_task(r, tasks[(i + direction + tasks.size()) % tasks.size()])
 
 

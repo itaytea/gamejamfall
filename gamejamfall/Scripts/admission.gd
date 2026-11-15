@@ -10,6 +10,7 @@ const COLOR_CLEAR := Color(0.18, 0.42, 0.22)
 const COLOR_INFECTED := Color(0.62, 0.16, 0.14)
 const COLOR_INCONCLUSIVE := Color(0.62, 0.45, 0.10)
 
+@onready var _portrait: Control = $Visitor
 @onready var _visitor_name: Label = $InfoBox/VisitorName
 @onready var _status: Label = $InfoBox/Status
 @onready var _dialogue: Control = $InfoBox/DialogueBox
@@ -70,6 +71,7 @@ func _refresh() -> void:
 		GameState.day, GameState.meals, GameState.residents.size(), Balance.MAX_RESIDENTS,
 		"+%d" % waiting if waiting > 0 else ""]
 
+	_portrait.show_resident(_visitor)
 	_visitor_name.text = _visitor.name
 	_status.text = _visitor.status_text()
 	match _visitor.known_status:

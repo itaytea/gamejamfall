@@ -511,7 +511,14 @@ func _roll_event() -> void:
 	var any_gardener := residents.any(func(r): return r.is_present() and r.task == Resident.Task.GARDENER)
 	if any_gardener:
 		_garden_yield_override = Balance.POOR_HARVEST_YIELD
-		_event("poor_harvest", {"amount": Balance.POOR_HARVEST_YIELD})
+		# name: a gardener to blame (some lines use it); total: what the whole garden made tonight
+		var gardeners := residents.filter(func(r): return r.is_present() and r.task == Resident.Task.GARDENER)
+		var blamed: Resident = gardeners.pick_random()
+		_event("poor_harvest", {
+			"amount": Balance.POOR_HARVEST_YIELD,
+			"total": productive_gardeners() * Balance.POOR_HARVEST_YIELD,
+			"name": blamed.name,
+		})
 
 
 func _forced_entry() -> void:
