@@ -32,7 +32,10 @@ var _busy := false   # True while dialogue plays; buttons are locked
 
 
 func _ready() -> void:
+	_status.set_script(preload("res://Scripts/UI/drip_label.gd"))   # "Infected" drips
+	_status.set_process(true)
 	_test_button.pressed.connect(_on_test)
+	_test_button.set_meta("no_click", true)          # Plays the test result instead
 	_admit_button.pressed.connect(_on_admit)
 	_deny_button.pressed.connect(_on_deny)
 	_folder.mouse_entered.connect(_show_roster)
@@ -50,6 +53,7 @@ func _next_visitor(first := false) -> void:
 	var main := get_tree().current_scene
 	if first or not main.has_method("fade_through"):
 		_show_visitor()
+		await Tutorial.tip("door")                     # First time only
 	else:
 		_busy = true                                    # Lock buttons through the fade
 		_refresh()
@@ -68,6 +72,7 @@ func _show_visitor() -> void:
 func _say(kind: String) -> void:
 	_busy = true
 	_refresh()
+	_dialogue.voice = Sfx.VOICES_BY_TONE[_visitor.voice]   # Their own tone of voice
 	await _dialogue.play(VISITOR_DIALOGUE, "v%d_%s" % [_visitor.dialogue_id, kind], [_visitor])
 	_busy = false
 	_refresh()
@@ -75,6 +80,7 @@ func _say(kind: String) -> void:
 
 func _on_test() -> void:
 	if GameState.test_visitor(_visitor):
+		Sfx.play_test_result(_visitor)
 		await _say("tested")
 
 

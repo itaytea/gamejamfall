@@ -6,6 +6,14 @@ extends Control
 ## (the Ration panel), then plays the rest of the night.
 
 const REPORT_DIALOGUE: DialogueResource = preload("res://Dialogue/report.dialogue")
+## Tutorial tips that follow a night event the first time it happens (Dialogue/tutorial.dialogue)
+const TIP_AFTER := {
+	"no_guard": "no_guard",
+	"infected": "infected",
+	"research_breakthrough": "lab",
+	"research_ready": "lab",
+	"lab_returned": "synth",
+}
 const TASK_NAMES: Dictionary = preload("res://Scripts/command.gd").TASK_NAMES
 
 # Ration rows: NAME | INFECTED? | TONIGHT (see ResidentRows for the colours)
@@ -35,7 +43,10 @@ func _play_report() -> void:
 	var i := 0
 	while true:
 		while i < GameState.events.size():
-			await _dialogue.play(REPORT_DIALOGUE, GameState.events[i].type, [GameState.events[i]])
+			var type: String = GameState.events[i].type
+			await _dialogue.play(REPORT_DIALOGUE, type, [GameState.events[i]])
+			if TIP_AFTER.has(type):
+				await Tutorial.tip(TIP_AFTER[type])        # First time only
 			i += 1
 		if not GameState.awaiting_ration:
 			break

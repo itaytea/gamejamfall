@@ -80,6 +80,23 @@ func _ready() -> void:
 	_food_shown = GameState.projected_meals()
 	_rebuild()
 	_slide_in()
+	_show_tips()
+
+
+## First-time tutorial tips, once the panel has slid in.
+func _show_tips() -> void:
+	await get_tree().create_timer(SLIDE_DELAY + SLIDE_TIME + 0.2).timeout
+	if _closing or not is_inside_tree():
+		return
+	await Tutorial.tip("command")
+	if GameState.present_residents().any(func(r): return r.known_status == Resident.Status.POSITIVE):
+		await Tutorial.tip("infected")
+	if GameState.materials >= 5:
+		await Tutorial.tip("beds")
+	if GameState.research >= 100.0 and not GameState.has_chemicals:
+		await Tutorial.tip("lab")
+	if GameState.has_chemicals:
+		await Tutorial.tip("synth")
 
 
 ## Start of the day: the panel eases up from below, then the rows pop in one by one.
@@ -91,6 +108,7 @@ func _slide_in() -> void:
 		row.modulate.a = 0.0
 	var tween := create_tween()
 	tween.tween_interval(SLIDE_DELAY)
+	tween.tween_callback(Sfx.play.bind("command"))
 	tween.tween_property(panel, "position:y", rest_y, SLIDE_TIME).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	var i := 0
 	for row in _rows.get_children():
@@ -213,8 +231,7 @@ func _make_row(r: Resident) -> HBoxContainer:
 	row.add_child(name_label)
 
 	var status := _label(r.status_text(), COL_STATUS)
-	if r.known_status == Resident.Status.POSITIVE:
-		status.set_script(DRIP_LABEL)            # "Infected" drips
+	status.set_script(DRIP_LABEL)                # "Infected" drips (other statuses don't)
 	status.add_theme_color_override("font_color", _status_color(r))
 	row.add_child(status)
 
@@ -237,6 +254,7 @@ func _make_row(r: Resident) -> HBoxContainer:
 	var test := Button.new()
 	test.custom_minimum_size = Vector2(COL_BUTTON, 0)
 	test.text = "T"
+	test.set_meta("no_click", true)              # Plays the test result instead
 	test.disabled = not GameState.can_test_resident(r)
 	test.pressed.connect(_on_test.bind(r))
 	row.add_child(test)
@@ -279,7 +297,8 @@ func _on_test(r: Resident) -> void:
 	if _shaking:
 		return
 	_exile_armed = null
-	GameState.test_resident(r)
+	if GameState.test_resident(r):
+		Sfx.play_test_result(r)
 
 
 func _cycle_task(r: Resident, direction: int) -> void:
@@ -294,6 +313,7 @@ func _cycle_task(r: Resident, direction: int) -> void:
 
 func _on_task_gui_input(event: InputEvent, r: Resident) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		Sfx.click()
 		_cycle_task(r, -1)
 
 

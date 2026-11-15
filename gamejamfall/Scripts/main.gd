@@ -6,6 +6,8 @@ extends Control
 ## Main and StageHolder ignore the mouse, so clicks reach the dialogue boxes.
 
 const FADE_TIME := 0.6
+const DEATH_HOLD := 2.0        # Seconds of black while the death sound starts, before a night where someone died
+const DEATH_EVENTS := ["died", "starved", "fight_killed", "forager_lost", "lab_lost"]
 
 @onready var holder: Control = $StageHolder
 @onready var _fade: ColorRect = $FadeLayer/Fade
@@ -20,6 +22,7 @@ var _win_scene := preload("res://Scenes/Win.tscn")
 var _current: Node
 var _pending: Node            # Scene waiting to be shown once the screen is black
 var _fading := false
+var _death_hold := false      # Next fade holds on black with the death sound
 
 
 func _ready() -> void:
@@ -32,6 +35,8 @@ func _ready() -> void:
 
 
 func _on_stage_changed(stage: int) -> void:
+	if stage == GameState.Stage.CONSEQUENCES:
+		_death_hold = GameState.events.any(func(e): return e.type in DEATH_EVENTS)
 	_show(_scenes[stage].instantiate())
 
 
@@ -57,6 +62,10 @@ func _transition() -> void:
 	_fade.mouse_filter = Control.MOUSE_FILTER_STOP     # Block clicks during the fade
 	if _current:                                         # First scene: already black
 		await _tween_fade(1.0)
+	if _death_hold:                                      # Someone died tonight: hold on black
+		_death_hold = false
+		Sfx.play("death")
+		await get_tree().create_timer(DEATH_HOLD).timeout
 	while _pending:
 		if _current:
 			_current.queue_free()

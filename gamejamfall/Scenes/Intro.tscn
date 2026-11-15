@@ -2,6 +2,11 @@
 
 [ext_resource type="Script" path="res://Scripts/intro.gd" id="1_intro"]
 [ext_resource type="Script" uid="uid://c1tmwa53ruxe5" path="res://Scripts/UI/dialogue_box.gd" id="2_box"]
+[ext_resource type="Shader" uid="uid://d000fief80d6w" path="res://Shaders/tv_static.gdshader" id="3_static"]
+
+[sub_resource type="ShaderMaterial" id="static_mat"]
+shader = ExtResource("3_static")
+shader_parameter/intensity = 0.0
 
 [sub_resource type="Gradient" id="fade_gradient"]
 offsets = PackedFloat32Array(0, 1)
@@ -32,6 +37,13 @@ mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 240.0
+offset_bottom = 135.0
+mouse_filter = 2
+
+[node name="Static" type="ColorRect" parent="."]
+material = SubResource("static_mat")
 layout_mode = 0
 offset_right = 240.0
 offset_bottom = 135.0
