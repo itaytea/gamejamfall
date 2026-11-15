@@ -15,7 +15,6 @@ const GARDEN_YIELD := 3
 const POOR_HARVEST_YIELD := 2
 const FORAGE_MIN := 3
 const FORAGE_MAX := 4
-const MAX_RESIDENTS := 5
 const GARDEN_PLOTS := 2                      # C: only this many gardeners produce food; extras do nothing
 const ROAD_INFECT_CHANCE := 0.2             # foragers can catch it on the road (the player isn't told)
 const FORAGE_DEATH_CHANCE := 0.25            # B: chance a forager dies on the road (they never come back)

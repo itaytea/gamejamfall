@@ -68,7 +68,7 @@ func _on_deny() -> void:
 func _refresh() -> void:
 	var waiting: int = GameState.visitors.size() - 1
 	_stats.text = "DAY %d\nFOOD %d\n%d/%d\n%s" % [
-		GameState.day, GameState.meals, GameState.residents.size(), Balance.MAX_RESIDENTS,
+		GameState.day, GameState.meals, GameState.residents.size(), GameState.max_residents,
 		"+%d" % waiting if waiting > 0 else ""]
 
 	_portrait.show_resident(_visitor)

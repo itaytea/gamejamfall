@@ -5,7 +5,7 @@ extends RefCounted
 
 #status on farm
 enum Status {UNKNOWN, INCONCLUSIVE, POSITIVE, NEGATIVE}
-enum Task { IDLE, GUARD, GARDENER, FORAGER, RESEARCHER, LAB, SYNTHESIZER }
+enum Task { IDLE, GUARD, GARDENER, FORAGER, RESEARCHER, LAB, SYNTHESIZER, BUILDER }
 enum Attribute { NONE, GREEDY, BELLIGERENT, SUPERSPREADER }   #hidden from the player
 
 #possible names: waiting on sam to make list
