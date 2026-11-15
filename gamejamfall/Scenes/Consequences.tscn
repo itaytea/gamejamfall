@@ -6,6 +6,39 @@
 [ext_resource type="Texture2D" uid="uid://dc2aldwrpghrp" path="res://Sprites/bg parts/back_trees.png" id="3_rthfd"]
 [ext_resource type="Texture2D" uid="uid://bpc41mq3nbaa5" path="res://Sprites/base_name_textbox.png" id="4_textbox"]
 [ext_resource type="Texture2D" uid="uid://ldim37chbdbt" path="res://Sprites/bg parts/front_trees.png" id="4_xgvbr"]
+[ext_resource type="Shader" uid="uid://cqgu2sw4x63di" path="res://Shaders/night_light.gdshader" id="5_nightshader"]
+[ext_resource type="Script" uid="uid://1xxoa5w62e2n" path="res://Scripts/UI/night_light.gd" id="6_nightlight"]
+[ext_resource type="Shader" uid="uid://bgb4jsvyr4fg" path="res://Shaders/tree_sway.gdshader" id="9_treesway"]
+
+[sub_resource type="ShaderMaterial" id="sway_back"]
+shader = ExtResource("9_treesway")
+shader_parameter/size_px = Vector2(240, 135)
+shader_parameter/speed = 0.6
+shader_parameter/amplitude = 1.3
+shader_parameter/wavelength = 45.0
+shader_parameter/phase = 0.0
+
+[sub_resource type="ShaderMaterial" id="sway_front"]
+shader = ExtResource("9_treesway")
+shader_parameter/size_px = Vector2(240, 135)
+shader_parameter/speed = 1.0
+shader_parameter/amplitude = 1.3
+shader_parameter/wavelength = 45.0
+shader_parameter/phase = 2.0
+
+[sub_resource type="ShaderMaterial" id="night_world"]
+shader = ExtResource("5_nightshader")
+shader_parameter/tint_color = Color(0.04, 0.05, 0.12, 1)
+shader_parameter/tint_strength = 0.62
+shader_parameter/screen_px = Vector2(240, 135)
+shader_parameter/radius = 16.0
+shader_parameter/edge = 10.0
+shader_parameter/has_mouse = true
+shader_parameter/mouse = Vector2(-100, -100)
+shader_parameter/trail = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/trail_age = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/trail_count = 0
+shader_parameter/glow = 0.05
 
 [sub_resource type="StyleBoxFlat" id="btn_disabled"]
 content_margin_left = 3.0
@@ -50,7 +83,7 @@ border_width_bottom = 1
 border_color = Color(0.14, 0.12, 0.12, 1)
 
 [sub_resource type="Theme" id="ration_theme"]
-default_font_size = 9
+default_font_size = 8
 Button/colors/font_color = Color(0.14, 0.12, 0.12, 1)
 Button/colors/font_disabled_color = Color(0.14, 0.12, 0.12, 0.45)
 Button/colors/font_focus_color = Color(0.14, 0.12, 0.12, 1)
@@ -64,6 +97,20 @@ Button/styles/hover_pressed = SubResource("btn_pressed")
 Button/styles/normal = SubResource("btn_normal")
 Button/styles/pressed = SubResource("btn_pressed")
 Label/colors/font_color = Color(0.14, 0.12, 0.12, 1)
+
+[sub_resource type="ShaderMaterial" id="night_screen"]
+shader = ExtResource("5_nightshader")
+shader_parameter/tint_color = Color(0.04, 0.05, 0.12, 1)
+shader_parameter/tint_strength = 0.25
+shader_parameter/screen_px = Vector2(240, 135)
+shader_parameter/radius = 16.0
+shader_parameter/edge = 10.0
+shader_parameter/has_mouse = true
+shader_parameter/mouse = Vector2(-100, -100)
+shader_parameter/trail = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/trail_age = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/trail_count = 0
+shader_parameter/glow = 0.0
 
 [node name="Consequences" type="Control" unique_id=75296849]
 layout_mode = 3
@@ -83,6 +130,7 @@ mouse_filter = 2
 texture = ExtResource("2_xjan4")
 
 [node name="BackTrees" type="TextureRect" parent="Background" unique_id=871714124]
+material = SubResource("sway_back")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -92,6 +140,7 @@ grow_vertical = 2
 texture = ExtResource("3_rthfd")
 
 [node name="FrontTrees" type="TextureRect" parent="Background/BackTrees" unique_id=1171021807]
+material = SubResource("sway_front")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -101,11 +150,12 @@ grow_vertical = 2
 texture = ExtResource("4_xgvbr")
 
 [node name="NightTint" type="ColorRect" parent="." unique_id=963437429]
+material = SubResource("night_world")
 layout_mode = 0
 offset_right = 240.0
 offset_bottom = 135.0
 mouse_filter = 2
-color = Color(0.04, 0.05, 0.12, 0.62)
+script = ExtResource("6_nightlight")
 
 [node name="Box" type="NinePatchRect" parent="." unique_id=1050522782]
 self_modulate = Color(1, 1, 1, 0.85)
@@ -127,7 +177,7 @@ offset_top = 3.0
 offset_right = 172.0
 offset_bottom = 18.0
 theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 16
 
 [node name="DialogueBox" type="Control" parent="Box" unique_id=189286948 node_paths=PackedStringArray("text_label")]
 anchors_preset = 0
@@ -144,7 +194,7 @@ layout_mode = 0
 offset_right = 164.0
 offset_bottom = 52.0
 theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 8
 autowrap_mode = 3
 
 [node name="Ration" type="NinePatchRect" parent="." unique_id=1245387340]
@@ -167,7 +217,7 @@ offset_left = 8.0
 offset_top = 3.0
 offset_right = 172.0
 offset_bottom = 16.0
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 16
 
 [node name="List" type="VBoxContainer" parent="Ration" unique_id=356039050]
 layout_mode = 0
@@ -184,3 +234,13 @@ offset_top = 94.0
 offset_right = 172.0
 offset_bottom = 107.0
 text = "CONFIRM"
+
+[node name="ScreenTint" type="CanvasLayer" parent="." unique_id=1379442490]
+layer = 5
+
+[node name="Tint" type="ColorRect" parent="ScreenTint" unique_id=1777037096]
+material = SubResource("night_screen")
+offset_right = 240.0
+offset_bottom = 135.0
+mouse_filter = 2
+script = ExtResource("6_nightlight")

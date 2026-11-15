@@ -5,7 +5,7 @@ extends Control
 ## while fading so nothing gets pressed twice.
 ## Main and StageHolder ignore the mouse, so clicks reach the dialogue boxes.
 
-const FADE_TIME := 0.3
+const FADE_TIME := 0.6
 
 @onready var holder: Control = $StageHolder
 @onready var _fade: ColorRect = $FadeLayer/Fade
@@ -67,6 +67,24 @@ func _transition() -> void:
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_fading = false
 	if _pending:                                         # Something arrived during fade-in
+		_transition()
+
+
+## Fade to black, run `swap` while the screen is black, fade back in.
+## Used inside a stage (e.g. between visitors). Clicks are blocked meanwhile.
+## If a stage swap is already fading, just runs `swap` straight away.
+func fade_through(swap: Callable) -> void:
+	if _fading:
+		swap.call()
+		return
+	_fading = true
+	_fade.mouse_filter = Control.MOUSE_FILTER_STOP
+	await _tween_fade(1.0)
+	swap.call()
+	await _tween_fade(0.0)
+	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fading = false
+	if _pending:                                         # A stage swap arrived meanwhile
 		_transition()
 
 

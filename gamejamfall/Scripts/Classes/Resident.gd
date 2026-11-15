@@ -46,7 +46,7 @@ var forage_days_left := 0
 static func random(infect_chance: float) -> Resident:
 	var r := Resident.new()
 	r.name = NAMES.pick_random()
-	r.dialogue_id = randi() % Balance.DIALOGUE_SET_COUNT
+	r.dialogue_id = Balance.pick_dialogue_set()
 	r.portrait_id = randi() % Balance.PORTRAIT_COUNT
 	r.base_id = randi() % Balance.BASE_COUNT
 	r.clothes_id = randi() % Balance.CLOTHES_COUNT

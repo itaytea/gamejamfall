@@ -7,7 +7,15 @@ const BASE_COUNT := 4
 const CLOTHES_COUNT := 14
 const FACE_COUNT := 10
 const HAIR_COUNT := 18
-const DIALOGUE_SET_COUNT := 6
+## How often each visitor personality (v0, v1, ... in visitors.dialogue) shows up.
+## 1.0 = regular, 0.5 = half as often, 0.25 = a quarter as often.
+## Add one entry per new set; the number of entries is the number of sets.
+const DIALOGUE_SET_WEIGHTS := [
+	1.0, 1.0, 1.0, 1.0, 1.0, 1.0,                 # v0-v5
+	1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,  # v6-v14
+	0.5,                                          # v15 picket fence
+	0.25,                                         # v16 neighbor
+]
 
 #
 const FORAGE_DAYS := 2
@@ -53,3 +61,16 @@ const FIGHT_KILL_CHANCE := 0.3               # chance a fight kills the other pe
 const SUPERSPREADER_INFECTS := 2             # people a superspreader infects when they die
 const TATTLE_CHANCE := 0.35                  # on a night with a theft or a survived fight: someone points a finger
 const TATTLE_TRUTH_CHANCE := 0.5             # true = a bystander accuses the culprit; false = the culprit accuses someone innocent
+
+
+## Picks a visitor dialogue set at random, using DIALOGUE_SET_WEIGHTS.
+static func pick_dialogue_set() -> int:
+	var total := 0.0
+	for w: float in DIALOGUE_SET_WEIGHTS:
+		total += w
+	var roll := randf() * total
+	for i in DIALOGUE_SET_WEIGHTS.size():
+		roll -= DIALOGUE_SET_WEIGHTS[i]
+		if roll < 0.0:
+			return i
+	return DIALOGUE_SET_WEIGHTS.size() - 1

@@ -27,16 +27,30 @@ func _ready() -> void:
 	_test_button.pressed.connect(_on_test)
 	_admit_button.pressed.connect(_on_admit)
 	_deny_button.pressed.connect(_on_deny)
-	_next_visitor()
+	_next_visitor(true)
 
 
-func _next_visitor() -> void:
+## Shows the next visitor at the door. The first one arrives with the stage's
+## own fade; later ones fade through black (Main.fade_through) so the swap
+## happens off-screen. With nobody left, the stage ends (Main fades that too).
+func _next_visitor(first := false) -> void:
 	if GameState.visitors.is_empty():
 		GameState.end_stage()
 		return
-	_visitor = GameState.visitors[0]
-	_refresh()
+	var main := get_tree().current_scene
+	if first or not main.has_method("fade_through"):
+		_show_visitor()
+	else:
+		_busy = true                                    # Lock buttons through the fade
+		_refresh()
+		await main.fade_through(_show_visitor)
 	await _say("greet")
+
+
+func _show_visitor() -> void:
+	_visitor = GameState.visitors[0]
+	_dialogue.text_label.text = ""                      # Drop the last visitor's line
+	_refresh()
 
 
 ## Plays this visitor's cue, e.g. "v0_greet", with the visitor passed in

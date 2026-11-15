@@ -44,11 +44,12 @@ const TASK_NAMES := {
 
 var _exile_armed: Resident = null   # Resident whose X was clicked once
 var _rebuild_queued := false
+var _closing := false     # Set on END DAY: the screen stops updating while it fades out
 var _warning_token := 0            # Ignores slow warning lookups that a newer refresh replaced
 
 
 func _ready() -> void:
-	_end_day.pressed.connect(GameState.end_stage)
+	_end_day.pressed.connect(_on_end_day)
 	_columns.add_theme_constant_override("separation", COL_GAP)
 	$Panel/Columns/Name.custom_minimum_size.x = COL_NAME
 	$Panel/Columns/Status.custom_minimum_size.x = COL_STATUS
@@ -61,13 +62,22 @@ func _ready() -> void:
 
 ## Rebuild after the current click finishes, never in the middle of a button's own signal.
 func _queue_rebuild() -> void:
-	if not _rebuild_queued:
+	if not _rebuild_queued and not _closing:
 		_rebuild_queued = true
 		_rebuild.call_deferred()
 
 
+## END DAY works out the night straight away. Freeze this screen first, so it doesn't
+## redraw with tomorrow's numbers while it fades out.
+func _on_end_day() -> void:
+	_closing = true
+	GameState.end_stage()
+
+
 func _rebuild() -> void:
 	_rebuild_queued = false
+	if _closing:
+		return
 	for child in _rows.get_children():
 		_rows.remove_child(child)
 		child.queue_free()

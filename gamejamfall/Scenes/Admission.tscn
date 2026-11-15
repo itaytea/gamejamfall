@@ -7,6 +7,19 @@
 [ext_resource type="Texture2D" uid="uid://ldim37chbdbt" path="res://Sprites/bg parts/front_trees.png" id="4_csang"]
 [ext_resource type="Texture2D" uid="uid://bpc41mq3nbaa5" path="res://Sprites/base_name_textbox.png" id="5_textbox"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/NpcPortrait.tscn" id="6_portrait"]
+[ext_resource type="Shader" path="res://Shaders/tree_sway.gdshader" id="9_treesway"]
+
+[sub_resource type="ShaderMaterial" id="sway_back"]
+shader = ExtResource("9_treesway")
+shader_parameter/speed = 0.6
+shader_parameter/amplitude = 1.3
+shader_parameter/phase = 0.0
+
+[sub_resource type="ShaderMaterial" id="sway_front"]
+shader = ExtResource("9_treesway")
+shader_parameter/speed = 1.0
+shader_parameter/amplitude = 1.3
+shader_parameter/phase = 2.0
 
 [sub_resource type="StyleBoxFlat" id="btn_normal"]
 bg_color = Color(1, 1, 1, 0)
@@ -60,6 +73,7 @@ mouse_filter = 2
 texture = ExtResource("2_p8bvg")
 
 [node name="BackTrees" type="TextureRect" parent="Background" unique_id=2069754351]
+material = SubResource("sway_back")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -69,6 +83,7 @@ grow_vertical = 2
 texture = ExtResource("3_dhug0")
 
 [node name="FrontTrees" type="TextureRect" parent="Background/BackTrees" unique_id=1556943148]
+material = SubResource("sway_front")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -127,7 +142,7 @@ offset_top = 2.0
 offset_right = 94.0
 offset_bottom = 16.0
 theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 
 [node name="Status" type="Label" parent="InfoBox" unique_id=880079622]
 layout_mode = 0
@@ -152,8 +167,7 @@ layout_mode = 0
 offset_right = 88.0
 offset_bottom = 40.0
 theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
-theme_override_constants/line_spacing = -3
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 8
 autowrap_mode = 3
 
 [node name="Buttons" type="HBoxContainer" parent="InfoBox" unique_id=1321235190]
@@ -173,7 +187,7 @@ theme_override_colors/font_focus_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_colors/font_pressed_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_colors/font_hover_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_colors/font_disabled_color = Color(0.14, 0.12, 0.12, 0.35)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 8
 theme_override_styles/normal = SubResource("btn_normal")
 theme_override_styles/pressed = SubResource("btn_pressed")
 theme_override_styles/hover = SubResource("btn_hover")
@@ -190,7 +204,7 @@ theme_override_colors/font_focus_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_colors/font_pressed_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_colors/font_hover_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_colors/font_disabled_color = Color(0.14, 0.12, 0.12, 0.35)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 8
 theme_override_styles/normal = SubResource("btn_normal")
 theme_override_styles/pressed = SubResource("btn_pressed")
 theme_override_styles/hover = SubResource("btn_hover")
@@ -207,7 +221,7 @@ theme_override_colors/font_focus_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_colors/font_pressed_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_colors/font_hover_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_colors/font_disabled_color = Color(0.14, 0.12, 0.12, 0.35)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 8
 theme_override_styles/normal = SubResource("btn_normal")
 theme_override_styles/pressed = SubResource("btn_pressed")
 theme_override_styles/hover = SubResource("btn_hover")
