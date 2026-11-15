@@ -2,19 +2,75 @@ extends Control
 ## Night report: plays each of tonight's events (GameState.events) as dialogue,
 ## one after another, then moves on (next day, or game over).
 ## Each event's "type" is a cue in Dialogue/report.dialogue.
+## If there isn't enough food, the report pauses and asks who goes without
+## (the Ration panel), then plays the rest of the night.
 
 const REPORT_DIALOGUE: DialogueResource = preload("res://Dialogue/report.dialogue")
 
 @onready var _title: Label = $Box/Title
 @onready var _dialogue: Control = $Box/DialogueBox
+@onready var _box: Control = $Box
+@onready var _ration: Control = $Ration
+@onready var _ration_title: Label = $Ration/Title
+@onready var _ration_list: VBoxContainer = $Ration/List
+@onready var _ration_confirm: Button = $Ration/Confirm
+
+var _unfed: Array = []
+signal _ration_chosen
 
 
 func _ready() -> void:
 	_title.text = "NIGHT %d" % GameState.day
+	_ration.hide()
+	_ration_confirm.pressed.connect(_on_ration_confirm)
 	_play_report()
 
 
 func _play_report() -> void:
-	for event in GameState.events:
-		await _dialogue.play(REPORT_DIALOGUE, event.type, [event])
+	var i := 0
+	while true:
+		while i < GameState.events.size():
+			await _dialogue.play(REPORT_DIALOGUE, GameState.events[i].type, [GameState.events[i]])
+			i += 1
+		if not GameState.awaiting_ration:
+			break
+		await _choose_unfed()   # Adds the rest of the night's events, then keep playing
 	GameState.end_stage()
+
+
+func _choose_unfed() -> void:
+	_unfed.clear()
+	for child in _ration_list.get_children():
+		_ration_list.remove_child(child)
+		child.queue_free()
+	for r in GameState.present_residents():
+		var b := Button.new()
+		b.toggle_mode = true
+		b.text = "%s  (%s)" % [r.name, r.status_text()]
+		b.toggled.connect(_on_ration_toggled.bind(r))
+		_ration_list.add_child(b)
+	_refresh_ration()
+	_box.hide()
+	_ration.show()
+	await _ration_chosen
+	_ration.hide()
+	_box.show()
+	GameState.resolve_ration(_unfed.duplicate())
+
+
+func _on_ration_toggled(on: bool, r: Resident) -> void:
+	if on and not r in _unfed:
+		_unfed.append(r)
+	elif not on:
+		_unfed.erase(r)
+	_refresh_ration()
+
+
+func _refresh_ration() -> void:
+	_ration_title.text = "WHO GOES WITHOUT?  %d/%d" % [_unfed.size(), GameState.ration_short]
+	_ration_confirm.disabled = _unfed.size() != GameState.ration_short
+
+
+func _on_ration_confirm() -> void:
+	if _unfed.size() == GameState.ration_short:
+		_ration_chosen.emit()

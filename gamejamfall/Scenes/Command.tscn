@@ -46,6 +46,9 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.14, 0.12, 0.12, 1)
 
+[sub_resource type="StyleBoxEmpty" id="header_baseline"]
+content_margin_top = 3.8
+
 [sub_resource type="Theme" id="cmd_theme"]
 default_font_size = 9
 Button/colors/font_color = Color(0.14, 0.12, 0.12, 1)
@@ -106,11 +109,13 @@ theme_override_font_sizes/font_size = 13
 [node name="Food" type="Label" parent="Panel/Header" unique_id=1565292041]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 8
+size_flags_vertical = 0
+theme_override_styles/normal = SubResource("header_baseline")
 
 [node name="Farm" type="Label" parent="Panel/Header" unique_id=1388602198]
 layout_mode = 2
-size_flags_vertical = 8
+size_flags_vertical = 0
+theme_override_styles/normal = SubResource("header_baseline")
 
 [node name="Columns" type="HBoxContainer" parent="Panel"]
 layout_mode = 0

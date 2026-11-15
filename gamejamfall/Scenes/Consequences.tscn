@@ -5,6 +5,64 @@
 [ext_resource type="Texture2D" path="res://Sprites/background.png" id="3_bg"]
 [ext_resource type="Texture2D" path="res://Sprites/base_name_textbox.png" id="4_textbox"]
 
+[sub_resource type="StyleBoxFlat" id="btn_normal"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.12, 0.12, 1)
+
+[sub_resource type="StyleBoxFlat" id="btn_hover"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(0.14, 0.12, 0.12, 0.15)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.12, 0.12, 1)
+
+[sub_resource type="StyleBoxFlat" id="btn_pressed"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(0.62, 0.16, 0.14, 0.3)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.16, 0.14, 1)
+
+[sub_resource type="StyleBoxFlat" id="btn_disabled"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.12, 0.12, 0.3)
+
+[sub_resource type="StyleBoxEmpty" id="btn_focus"]
+
+[sub_resource type="Theme" id="ration_theme"]
+default_font_size = 9
+Button/colors/font_color = Color(0.14, 0.12, 0.12, 1)
+Button/colors/font_disabled_color = Color(0.14, 0.12, 0.12, 0.45)
+Button/colors/font_focus_color = Color(0.14, 0.12, 0.12, 1)
+Button/colors/font_hover_color = Color(0.14, 0.12, 0.12, 1)
+Button/colors/font_pressed_color = Color(0.62, 0.16, 0.14, 1)
+Button/colors/font_hover_pressed_color = Color(0.62, 0.16, 0.14, 1)
+Button/styles/disabled = SubResource("btn_disabled")
+Button/styles/focus = SubResource("btn_focus")
+Button/styles/hover = SubResource("btn_hover")
+Button/styles/hover_pressed = SubResource("btn_pressed")
+Button/styles/normal = SubResource("btn_normal")
+Button/styles/pressed = SubResource("btn_pressed")
+Label/colors/font_color = Color(0.14, 0.12, 0.12, 1)
+
 [node name="Consequences" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -69,3 +127,41 @@ offset_bottom = 52.0
 theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
 theme_override_font_sizes/font_size = 11
 autowrap_mode = 3
+
+[node name="Ration" type="NinePatchRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.85)
+layout_mode = 0
+offset_left = 30.0
+offset_top = 12.0
+offset_right = 210.0
+offset_bottom = 123.0
+theme = SubResource("ration_theme")
+texture = ExtResource("4_textbox")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Title" type="Label" parent="Ration"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 3.0
+offset_right = 172.0
+offset_bottom = 16.0
+theme_override_font_sizes/font_size = 11
+
+[node name="List" type="VBoxContainer" parent="Ration"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 18.0
+offset_right = 172.0
+offset_bottom = 92.0
+theme_override_constants/separation = 2
+
+[node name="Confirm" type="Button" parent="Ration"]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 94.0
+offset_right = 172.0
+offset_bottom = 107.0
+text = "CONFIRM"

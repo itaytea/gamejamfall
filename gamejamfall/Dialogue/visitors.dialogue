@@ -1,7 +1,8 @@
 # Each visitor has the same three cues: v<id>_greet, v<id>_tested, v<id>_rejected.
 # all three cues come from the same personality.
 # Add v3_..., v4_... sets and raise Balance.DIALOGUE_SET_COUNT to match.
-# Keep each line under ~100 characters, split longer speeches into several lines.
+# Keep each line under ~55 characters so it fits the door's textbox; split longer speeches into several lines.
+# Every cue must end with => END, or it runs on into the next cue.
 
 #-- v0
 
@@ -34,12 +35,13 @@
 {{name}}: Bye-bye!!
 => END
 
-#-- v0
+#-- v2
 
 ~ v2_greet
 {{name}}: Rumor has been spreading of a safe location in this area…
 {{name}}: Would you please let me stop by here for a moment?
-{{name}}: It’s been forever since I’ve had a day of rest. I promise you I won’t stay for long.
+{{name}}: It’s been forever since I’ve had a day of rest.
+{{name}}: I promise you I won’t stay for long.
 => END
 
 ~ v2_tested
@@ -50,42 +52,55 @@
 {{name}}: I understand, I wish you the best of luck
 => END
 
+#-- v3
+
 ~ v3_greet
-{{name}}: I've been traveling for days, feels like walking in cirlces
+{{name}}: I've been traveling for days, feels like walking in circles
 {{name}}: Would you be so kind as to let me in?
+=> END
 
 ~ v3_tested
 {{name}}: If it gives you the peace of mind...
+=> END
 
 ~ v3_rejected
 {{name}}: ...
-{{name}}: Pehaps the stars will guide me tonight
+{{name}}: Perhaps the stars will guide me tonight
 => END
+
+#-- v4
 
 ~ v4_greet
 {{name}}: Those woods will trick'ya, eh?
-{{name}}: If you're not careful, you might find yourself walking in circles
+{{name}}: If you're not careful...
+{{name}}: ...you might find yourself walking in circles
 {{name}}: Listen, I'm very tired. Would 'preciate if u gave me a bed
 {{name}}: Whaddaya say? eh?
+=> END
 
 ~ v4_tested
 {{name}}: Can't be too careful, eh?
+=> END
 
 ~ v4_rejected
 {{name}}: That's too bad, eh?
 {{name}}: Ya have a nice day!
 => END
 
+#-- v5
+
 ~ v5_greet
 {{name}}: Dudeeee, im sooo tired
 {{name}}: *yawnnnnnnn*
 {{name}}: Waddaya say bro, lemme in? I make some killer brownies
+=> END
 
 ~ v5_tested
 {{name}}: Chilllllllll
+=> END
 
 ~ v5_rejected
-{{name}}: Brooooooooo, u gotta get a chill on for real
+{{name}}: Brooooooooo, u gotta get a chill on for real.
 => END
 # any beds? any food?
 # are there other people here?

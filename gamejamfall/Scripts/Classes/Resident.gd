@@ -6,9 +6,16 @@ extends RefCounted
 #status on farm
 enum Status {UNKNOWN, INCONCLUSIVE, POSITIVE, NEGATIVE}
 enum Task { IDLE, GUARD, GARDENER, FORAGER, RESEARCHER, LAB, SYNTHESIZER }
+enum Attribute { NONE, GREEDY, BELLIGERENT, SUPERSPREADER }   #hidden from the player
 
 #possible names: waiting on sam to make list
-const NAMES := ["Itay", "Darinah", "Sam", "Keira", "Cameron", "Joan", "Iwa", "August", "Kier", "Harini", "Breanna", "Kailey", "Audrey", "Claire", "Jared"]
+const NAMES := ["Itay", "Darinah", "Sam", "Keira", "Cameron", "Joan", "Iwa", 
+"August", "Kier", "Harini", "Breanna", "Kailey", 
+"Audrey", "Claire", "Jared", "Ian", 
+"Jamie", "Aiden", "AJ", "DJ", "Soda", "Jimmy", "Corey",
+"Micheal", "Severino", "Arman", "Joey", "Owen", "Casper",
+"Chloe", "Ash", "Noelle", "Anthony", "James", "Williamson", "Marcus", "Justin",
+"Kiran", "Meg", "Lina", "Annaliese", "Christian", "Jensen", "Alice"]
 
 # -- resident specific values --
 
@@ -20,6 +27,7 @@ var dialogue_id: int
 var is_infected := false
 var days_until_death:= -1 #-1 if healthy
 var is_dead := false
+var attribute: Attribute = Attribute.NONE   #hidden: never shown to the player
 
 #sickness - known variables
 var known_status: Status = Status.UNKNOWN
@@ -36,6 +44,8 @@ static func random(infect_chance: float) -> Resident:
 	r.name = NAMES.pick_random()
 	r.dialogue_id = randi() % Balance.DIALOGUE_SET_COUNT
 	r.portrait_id = randi() % Balance.PORTRAIT_COUNT
+	if randf() < Balance.ATTRIBUTE_CHANCE:
+		r.attribute = [Attribute.GREEDY, Attribute.BELLIGERENT, Attribute.SUPERSPREADER].pick_random()
 	if randf() < infect_chance:
 		r.is_infected = true
 		#has a chance to be a few days into the infection already
@@ -45,11 +55,13 @@ static func random(infect_chance: float) -> Resident:
 # -- Disease functions --
 
 #fresh infection
+#caught from someone who died (or a fight): the player sees who caught it, so their status is known
 func infect() -> void:
 	if is_infected or is_dead:
 		return
 	is_infected = true
 	days_until_death = Balance.DISEASE_DAYS
+	known_status = Status.POSITIVE
 
 #checks if person dies, called once a night
 func tick_disease() -> bool:
@@ -133,4 +145,5 @@ func task_text() -> String:
 # debug only
 func debug_text() -> String:
 	var clock := "healthy" if not is_infected else "%dd days left" % days_until_death
-	return "%s | %s | %s%s" % [name, clock, task_text(), " | Dead" if is_dead else ""]
+	var attr: String = "" if attribute == Attribute.NONE else " | " + Attribute.keys()[attribute].capitalize()
+	return "%s | %s | %s%s%s" % [name, clock, task_text(), attr, " | Dead" if is_dead else ""]

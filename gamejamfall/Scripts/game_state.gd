@@ -30,6 +30,11 @@ var synth_nights := 0                 # Nights in a row the same person has synt
 var is_won := false
 var _synth_resident: Resident = null
 
+# Rationing: when tonight's food can't feed everyone, the night pauses and the
+# night report asks the player who goes without (see resolve_ration)
+var awaiting_ration := false
+var ration_short := 0                 # How many residents can't be fed tonight
+
 var _skip_admission := false          # Set when nobody guarded last night
 var _garden_yield_override := -1      # Set by events; -1 = normal yield
 
@@ -50,6 +55,8 @@ func start_new_run() -> void:
 	synth_nights = 0
 	is_won = false
 	_synth_resident = null
+	awaiting_ration = false
+	ration_short = 0
 	for i in 2:
 		var r := _make_person(0.0)                 # Guaranteed healthy...
 		r.known_status = Resident.Status.NEGATIVE  # ...and the player knows it
@@ -262,10 +269,58 @@ func _resolve_night() -> void:
 				r.return_home()
 				_event("forager_returned", {"name": r.name, "amount": found})
 
-	# 4. Eating: everyone present, plus the player
-	var eaten := (present_residents().size() + 1) * Balance.MEALS_PER_PERSON
+	# 3b. Hidden attributes: greedy residents take food, belligerent ones start fights,
+	#     and sometimes someone points a finger (truthfully or not)
+	var thieves := _greedy_night()
+	var brawlers := _fight_night()
+	_tattle_night(thieves, brawlers)
+
+	# 4. Eating. The player eats first. If what's left can't feed every resident,
+	#    pause here: the night report asks the player who goes without, then calls
+	#    resolve_ration(), which finishes the night. (No food even for the player: game over.)
+	var mouths := present_residents().size()
+	var can_feed := (meals - Balance.MEALS_PER_PERSON) / Balance.MEALS_PER_PERSON
+	if meals >= Balance.MEALS_PER_PERSON and can_feed < mouths:
+		ration_short = mouths - maxi(can_feed, 0)
+		awaiting_ration = true
+		_event("ration_needed", {"count": ration_short})
+		return
+	_finish_night([])
+
+
+## Called by the night report once the player has picked exactly ration_short
+## residents to go without food. They starve; then the rest of the night plays out.
+func resolve_ration(unfed: Array) -> void:
+	if not awaiting_ration:
+		return
+	awaiting_ration = false
+	ration_short = 0
+	_finish_night(unfed)
+
+
+func _finish_night(unfed: Array) -> void:
+	# 4. Eating (continued): everyone fed, plus the player
+	var fed := present_residents().filter(func(r): return not r in unfed).size()
+	var eaten := (fed + 1) * Balance.MEALS_PER_PERSON
 	meals -= eaten
 	_event("eaten", {"amount": eaten, "left": maxi(meals, 0)})
+
+	# 4b. Starvation: whoever went without dies. Like a fight death, they only
+	#     spread the disease if they were sick (a superspreader infects two).
+	for r in unfed:
+		if not r in residents:
+			continue
+		r.is_dead = true
+		residents.erase(r)
+		_event("starved", {"name": r.name})
+		if r.is_infected:
+			var spreads := Balance.SUPERSPREADER_INFECTS if r.attribute == Resident.Attribute.SUPERSPREADER else 1
+			for i in spreads:
+				var victim := _random_healthy()
+				if victim == null:
+					break
+				victim.infect()
+				_event("infected", {"name": victim.name, "from": r.name})
 
 	# 5. Disease. Collect deaths first, then infect, so nobody infected tonight also ticks tonight.
 	var died_on_farm: Array[Resident] = []
@@ -276,12 +331,13 @@ func _resolve_night() -> void:
 			_event("died", {"name": r.name})
 
 	for dead in died_on_farm:
-		var healthy := residents.filter(func(r): return r.is_present() and not r.is_infected)
-		if healthy.is_empty():
-			continue
-		var victim: Resident = healthy.pick_random()
-		victim.infect()
-		_event("infected", {"name": victim.name, "from": dead.name})
+		var spreads := Balance.SUPERSPREADER_INFECTS if dead.attribute == Resident.Attribute.SUPERSPREADER else 1
+		for i in spreads:
+			var victim := _random_healthy()
+			if victim == null:
+				break
+			victim.infect()
+			_event("infected", {"name": victim.name, "from": dead.name})
 
 	# 6. Time on farm
 	for r in residents:
@@ -333,6 +389,101 @@ func _resolve_night() -> void:
 	# 9. No guard: people slip in overnight, and tomorrow's admission is skipped
 	elif not has_guard():
 		_forced_entry()
+
+
+# ================================================================ Hidden attributes
+
+func _random_healthy() -> Resident:
+	var healthy := residents.filter(func(r): return r.is_present() and not r.is_infected)
+	return null if healthy.is_empty() else healthy.pick_random()
+
+
+## Greedy: food goes missing. The report never says who took it.
+## Returns the residents who stole tonight (for the tattletale).
+func _greedy_night() -> Array:
+	var stolen := 0
+	var thieves := []
+	for r in residents:
+		if r.is_present() and r.attribute == Resident.Attribute.GREEDY and randf() < Balance.GREEDY_STEAL_CHANCE:
+			var take := mini(randi_range(Balance.GREEDY_STEAL_MIN, Balance.GREEDY_STEAL_MAX), maxi(meals - stolen, 0))
+			if take > 0:
+				stolen += take
+				thieves.append(r)
+	if stolen > 0:
+		meals -= stolen
+		_event("food_stolen", {"amount": stolen})
+	return thieves
+
+
+## Belligerent: a fight with another resident at home. If the other person survives,
+## the report names both (in random order, so it doesn't give away who started it).
+## If they die, it's clear who did it. A sick victim infects their killer, and a sick
+## superspreader victim also infects one more person.
+## Returns [attacker, victim] pairs for fights where nobody died (for the tattletale).
+func _fight_night() -> Array:
+	var survived := []
+	for attacker in residents.duplicate():
+		if not attacker.is_present() or attacker.attribute != Resident.Attribute.BELLIGERENT:
+			continue
+		if randf() >= Balance.FIGHT_CHANCE:
+			continue
+		var others := residents.filter(func(o): return o != attacker and o.is_present())
+		if others.is_empty():
+			continue
+		var victim: Resident = others.pick_random()
+		if randf() >= Balance.FIGHT_KILL_CHANCE:
+			var pair := [attacker.name, victim.name]
+			pair.shuffle()
+			_event("fight", {"a": pair[0], "b": pair[1]})
+			survived.append([attacker, victim])
+			continue
+		victim.is_dead = true
+		residents.erase(victim)
+		_event("fight_killed", {"name": victim.name, "killer": attacker.name})
+		if victim.is_infected:
+			if not attacker.is_infected:
+				attacker.infect()
+				_event("infected_by_fight", {"name": attacker.name, "from": victim.name})
+			if victim.attribute == Resident.Attribute.SUPERSPREADER:
+				var bystander := _random_healthy()
+				if bystander != null:
+					bystander.infect()
+					_event("infected_bystander", {"name": bystander.name, "from": victim.name})
+	return survived
+
+
+## Tattletale: after a theft or a survived fight, someone may accuse someone.
+## Truthful: a bystander names the culprit. Lie: the culprit names an innocent person.
+## Either way the culprit is one of the two names, which is the player's clue.
+func _tattle_night(thieves: Array, brawlers: Array) -> void:
+	var incidents := []
+	for t in thieves:
+		incidents.append({"kind": "theft", "culprit": t, "victim": null})
+	for pair in brawlers:
+		incidents.append({"kind": "fight", "culprit": pair[0], "victim": pair[1]})
+	if incidents.is_empty() or randf() >= Balance.TATTLE_CHANCE:
+		return
+	var incident: Dictionary = incidents.pick_random()
+	var culprit: Resident = incident.culprit
+	if not culprit.is_present():
+		return
+	var accuser: Resident
+	var accused: Resident
+	if randf() < Balance.TATTLE_TRUTH_CHANCE:
+		# Someone else saw it. In a fight, the victim knows best who started it.
+		var witnesses := residents.filter(func(o): return o != culprit and o.is_present())
+		if witnesses.is_empty():
+			return
+		accuser = incident.victim if incident.victim != null and incident.victim.is_present() and randf() < 0.5 else witnesses.pick_random()
+		accused = culprit
+	else:
+		# The culprit points the finger elsewhere. In a fight, at the other person.
+		var innocents := residents.filter(func(o): return o != culprit and o.is_present())
+		if innocents.is_empty():
+			return
+		accuser = culprit
+		accused = incident.victim if incident.victim != null and incident.victim.is_present() else innocents.pick_random()
+	_event("tattle_" + incident.kind, {"accuser": accuser.name, "accused": accused.name})
 
 
 func _is_trip(task: Resident.Task) -> bool:
