@@ -15,7 +15,8 @@ const NAMES := ["Itay", "Darinah", "Sam", "Keira", "Cameron", "Joan", "Iwa",
 "Jamie", "Aiden", "AJ", "DJ", "Soda", "Jimmy", "Corey",
 "Micheal", "Severino", "Arman", "Joey", "Owen", "Casper",
 "Chloe", "Ash", "Noelle", "Anthony", "James", "Williamson", "Marcus", "Justin",
-"Kiran", "Meg", "Lina", "Annaliese", "Christian", "Jensen", "Alice"]
+"Kiran", "Meg", "Lina", "Annaliese", "Christian", "Jensen", "Alice", "Tina", "Ronan", "Rachel",
+"Finn", "Will", "Emma"]
 
 # -- resident specific values --
 

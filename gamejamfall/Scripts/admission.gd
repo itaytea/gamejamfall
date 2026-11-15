@@ -14,10 +14,18 @@ const COLOR_INCONCLUSIVE := Color(0.62, 0.45, 0.10)
 @onready var _visitor_name: Label = $InfoBox/VisitorName
 @onready var _status: Label = $InfoBox/Status
 @onready var _dialogue: Control = $InfoBox/DialogueBox
+@onready var _day: Label = $StatsBox/Day
 @onready var _stats: Label = $StatsBox/Stats
 @onready var _test_button: Button = $InfoBox/Buttons/Test
 @onready var _admit_button: Button = $InfoBox/Buttons/Admit
 @onready var _deny_button: Button = $InfoBox/Buttons/Deny
+@onready var _folder: TextureButton = $Folder
+@onready var _roster: Control = $Roster
+@onready var _roster_title: Label = $Roster/Title
+@onready var _roster_list: VBoxContainer = $Roster/List
+
+# Folder roster: NAME | INFECTED? | WHERE (see ResidentRows)
+const ROSTER_COLS := [52, 50, 60]
 
 var _visitor: Resident
 var _busy := false   # True while dialogue plays; buttons are locked
@@ -27,6 +35,8 @@ func _ready() -> void:
 	_test_button.pressed.connect(_on_test)
 	_admit_button.pressed.connect(_on_admit)
 	_deny_button.pressed.connect(_on_deny)
+	_folder.mouse_entered.connect(_show_roster)
+	_folder.mouse_exited.connect(_hide_roster)
 	_next_visitor(true)
 
 
@@ -81,9 +91,10 @@ func _on_deny() -> void:
 
 func _refresh() -> void:
 	var waiting: int = GameState.visitors.size() - 1
-	_stats.text = "DAY %d\nFOOD %d\n%d/%d\n%s" % [
-		GameState.day, GameState.meals, GameState.residents.size(), GameState.max_residents,
-		"+%d" % waiting if waiting > 0 else ""]
+	_day.text = "Day %d" % GameState.day
+	_stats.text = "Meals: %d\nMats: %d\nBeds: %d/%d%s" % [
+		GameState.meals, GameState.materials, GameState.residents.size(), GameState.max_residents,
+		"\n+%d waiting" % waiting if waiting > 0 else ""]   # Visitors still in line after this one
 
 	_portrait.show_resident(_visitor)
 	_visitor_name.text = _visitor.name
@@ -97,3 +108,52 @@ func _refresh() -> void:
 	_test_button.disabled = _busy or not GameState.can_test(_visitor)
 	_admit_button.disabled = _busy or GameState.is_farm_full()
 	_deny_button.disabled = _busy
+
+
+# -- Folder roster: hover the folder to see who's on the farm --
+
+func _show_roster() -> void:
+	for child in _roster_list.get_children():
+		_roster_list.remove_child(child)
+		child.queue_free()
+	_roster_title.text = "RESIDENTS  %d/%d" % [GameState.residents.size(), GameState.max_residents]
+	var border := StyleBoxFlat.new()
+	border.bg_color = Color(0, 0, 0, 0)
+	border.set_border_width_all(1)
+	border.border_color = ResidentRows.COLOR_TEXT
+	for r: Resident in GameState.residents:
+		var row := Panel.new()
+		row.custom_minimum_size.y = ResidentRows.ROW_HEIGHT
+		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_theme_stylebox_override("panel", border)
+		var cols := ResidentRows.columns([r.name, r.status_text(), _whereabouts(r)], ROSTER_COLS)
+		ResidentRows.color_row(cols, r)
+		row.add_child(cols)
+		_roster_list.add_child(row)
+	if GameState.residents.is_empty():
+		var l := Label.new()
+		l.text = "No one lives here."
+		l.add_theme_font_size_override("font_size", ResidentRows.FONT_SIZE)
+		l.add_theme_color_override("font_color", ResidentRows.COLOR_TEXT)
+		_roster_list.add_child(l)
+	# Grow the window to fit the list
+	var rows := maxi(GameState.residents.size(), 1)
+	_roster.size.y = 18 + rows * (ResidentRows.ROW_HEIGHT + 2) + 6
+	_folder.position.y = 83                    # Folder lifts a pixel while open
+	_roster.show()
+
+
+func _hide_roster() -> void:
+	_folder.position.y = 84
+	_roster.hide()
+
+
+## Where a resident is right now: out on a trip (and how many nights until
+## they're due back), synthesizing the cure, or home.
+func _whereabouts(r: Resident) -> String:
+	if r.is_away:
+		var place := "At the lab" if r.task == Resident.Task.LAB else "On the road"
+		return "%s (%dd)" % [place, r.forage_days_left]
+	if r.task == Resident.Task.SYNTHESIZER:
+		return "Synthesizing"
+	return "Home"

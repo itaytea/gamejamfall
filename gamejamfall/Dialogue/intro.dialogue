@@ -1,0 +1,37 @@
+# Opening cutscene. One cue per part; the background for each part is set in
+# Scripts/intro.gd (PARTS). Every cue must end with => END.
+# The textbox fits about two lines: split longer sentences into separate lines.
+
+~ intro_1
+After a long drive home, you turn on the TV to watch your favorite show.
+But instead, you are met with an emergency broadcast from the government.
+=> END
+
+~ intro_2
+“ALL NORMAL BROADCASTING HAS BEEN DISCONTINUED DURING THIS EMERGENCY”
+“AN INFECTIOUS FUNGUS THAT IS HIGHLY LETHAL HAS SPREAD RAPIDLY”
+“INDIVIDUALS INFECTED DIE WITHIN THREE DAYS OF INFECTION
+AND HAVE A HIGHLY CONTAGIOUS ROT ON THE RESULTING CORPSE.”
+“THERE ARE NO VISIBLE SYMPTOMS OF THE CONTAGION”
+“TESTING RESIDENTS FOR DISEASE IS RECOMMENDED.”
+“SEEK AND REMAIN IN SHELTER AND WAIT UNTIL FURTHER NOTICE”
+=> END
+
+~ intro_3
+The broadcast suddenly turns to static.
+=> END
+
+~ intro_4
+You live with your family on a small farm with an electric fence perimeter.
+There’s a limited amount of food that you must manage carefully.
+=> END
+
+~ intro_5
+You find old test strips in a box, although it is an energy-intensive process to use them.
+=> END
+
+~ intro_6
+You must tend to your crops, as you can sustain yourself with what you can grow,
+but making sure the perimeter is secure is your utmost priority.
+Perhaps the old textbooks in your library might have beneficial information on how to deal with this crisis.
+=> END

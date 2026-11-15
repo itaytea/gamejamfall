@@ -301,6 +301,112 @@
 {{name}}: And to abandon your neighbor in a plight?
 => END
 
+#-- v17  (rare (0.25): silent)
+
+~ v17_greet
+{{name}}: …
+{{name}}: …
+{{name}}: ……
+=> END
+
+~ v17_tested
+{{name}}: ………
+=> END
+
+~ v17_rejected
+{{name}}: .
+=> END
+
+#-- v18  (yoohoo)
+
+~ v18_greet
+{{name}}: Yoohoo! YOOOOHOOOOO!
+{{name}}: I spied with my little eye your little hidey hole from a mile away!
+{{name}}: So whaddaya say… let me stay a little?
+=> END
+
+~ v18_tested
+{{name}}: Come on… you KNOW I’m safe.
+=> END
+
+~ v18_rejected
+{{name}}: You’re going to regret this!
+=> END
+
+#-- v19  (hey <3)
+
+~ v19_greet
+{{name}}: Hey <3
+{{name}}: You’re cute. Can I come over?
+=> END
+
+~ v19_tested
+{{name}}: Oh.
+=> END
+
+~ v19_rejected
+{{name}}: Call me <3
+=> END
+
+#-- v20  (TREBLE TROUBLE)
+
+~ v20_greet
+{{name}}: Couldn’t help but notice this compound lacks… joy. Lacks… happiness.
+{{name}}: You might know me, I was part of TREBLE TROUBLE.
+{{name}}: Not “Treble Trouble”, all caps TREBLE TROUBLE!!
+{{name}}: Gotta put some respect on the best minor league adult acapella group in west Washington.
+{{name}}: I will display my talents, then, you will offer me a bed….
+{{name}}: LA LA LA LA LA LA
+=> END
+
+~ v20_tested
+{{name}}: Careful on my vocal cords!
+=> END
+
+~ v20_rejected
+{{name}}: You’re gonna let fungus take away THIS talent?
+=> END
+
+#-- v21  (ultra rare (0.01): two dads)
+
+~ v21_greet
+{{name}}: Nice little house you got there.
+{{name}}: You might be thinking. “This person is here just for room and board”. And you’re right
+{{name}}: But I am not your average beggar,
+{{name}}: See, I was born out of love. My two dads screened potential surrogates based on beauty and IQ.
+{{name}}: Then, they mixed their sperm together and used a turkey baster.
+{{name}}: To this day, we don’t know who my real dad is. Which I think is pretty amazing!
+{{name}}: My dad spoiled me in the arts. I was given dance lessons, vocal lessons, anything to give me a competitive edge.
+{{name}}: You might think any house in town would want me to help around, at a time like this. And you’d be right!
+=> END
+
+~ v21_tested
+{{name}}: AHHHHHHHH
+=> END
+
+~ v21_rejected
+{{name}}: You wouldn’t know talent if it was shoved down your throat with a silver spoon….
+=> END
+
+#-- v22  (survivor)
+
+~ v22_greet
+{{name}}: Some people think it’s hard, living like this, you know
+{{name}}: In light of the infection and all
+{{name}}: You think that’s hard? Try being waterboarded…
+{{name}}: Try being lost deep in the Sahara for weeks with nothing but your own urine to drink.
+{{name}}: THAT’S HARD!
+=> END
+
+~ v22_tested
+{{name}}: This test is nothing compared to what I had to endure.
+=> END
+
+~ v22_rejected
+{{name}}: You think this rejection is hard for me?
+{{name}}: Try being in love with an intelligence asset of your adversary, that’s HARD
+=> END
+
 # any beds? any food?
 # are there other people here?
 # have u seen this person around here?

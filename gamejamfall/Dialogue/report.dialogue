@@ -77,7 +77,7 @@ Everyone was fed. {{amount}} meals gone, {{left}} left.
 
 ~ died
 % {{name}} didn't wake up this morning.
-% {{name}} is gone.
+% {{name}} died in the night.
 => END
 
 ~ infected
@@ -125,25 +125,37 @@ You are the only one left.
 % {{name}} stayed up scribbling notes by candlelight.
 % {{name}} pored over medical journals until dawn.
 % {{name}} ran another round of experiments in the shed.
+% {{name}} was reading a biology textbook, taking down notes. 
 => END
 
 ~ research_0
-You feel lost in the material, swarmed with no understanding in sight.
+% You feel lost in the material, swarmed with no understanding in sight.
+% This seems like a task for the smartest people, you are doubting if you have any chance
+% This material seems like a mess of words and symbols
+% All of this material just reads as nonsense to you
 => END
 
 ~ research_25
-You feel like you’ve come to grasp the basics of chemistry and human biology.
-However, you’re far from finding a cure.
+%
+	You feel like you’ve come to grasp the basics of chemistry and human biology.
+	However, you’re far from finding a cure.
+% The words in those textbooks are starting to make sense
+% Some basic concepts are starting to fall into place
 => END
 
 ~ research_50
-You are starting to feel more confident in your knowledge.
-An end might be in sight.
+%
+	You are starting to feel more confident in your knowledge.
+	An end might be in sight.
+% YYou feel like with enough time you could cure any disease
+% The concept of coming up with a cure is not as daunting anymore
 => END
 
 ~ research_75
-It’s only a matter of weeks before you reach a breakthrough.
+% It’s only a matter of weeks before you reach a breakthrough.
 You are starting to feel hope.
+% Working dilligently, this nightmare might end soon
+% This rot no longer feels like a world ending threat
 => END
 
 ~ research_breakthrough
@@ -183,29 +195,61 @@ It works. This nightmare is over.
 # food_stolen: a greedy resident took food. Never name them. {{amount}} = meals taken.
 ~ food_stolen
 % Some food went missing from the pantry overnight.
+% It seems someone on the farm has no care for rationing
 % The pantry looks lighter than it should. {{amount}} meals are gone.
+% When tallying the food this morning, you realize {{amount}} meals have dissappeared.
 => END
 
 # fight: a fight where nobody died. {{a}} and {{b}} are in random order (don't reveal who started it).
 ~ fight
-% {{a}} and {{b}} got into a fight last night.
-% Shouting woke the farm. {{a}} and {{b}} came to blows.
+%2 {{a}} and {{b}} got into a fight last night.
+%
+	{{a}} and {{b}} got into an argument over food
+	{{a}} accused {{b}} of having a hidden stash of food in their room
+	This argument escelated into a fight
+	There was no such stash
+%
+	{{a}} and {{b}} got into an argument over love
+	In a heart to heart, {{a}} and {{b}} realized they developed feelings for the same resident
+	Naturally, the only way to resolve this issue was via a brawl.
+	Their brawl ended in a tie. 
+% 
+	Shouting woke the farm. {{a}} and {{b}} came to blows.
+	Loud cheering noises came from the quarters tonight
+	The residents gathered around {{a}} and {{b}}
+	By the time you got there, they were both bruised up
+	Luckily, the crowd held them back before it was too late
 => END
 
 # fight_killed: {{killer}} killed {{name}}.
 ~ fight_killed
-% {{killer}} killed {{name}} in a fight.
-% A fight broke out. {{name}} didn't get up. {{killer}} was standing over them.
+%
+	Loud cheering noises came from the quarters tonight
+	The residents gathered around {{killer}} and {{name}}
+	{{killer}} threw a punch, immeadiatly knocking {{name}} down
+	The crowd quickly disperesed when they realized {{name}} was not getting back up
+%
+	{{killer}} came to your room, clothes stained with blood
+	With tears rolling down their eyes, they admitted to killing {{name}} in a fit of rage
+	They begged you for mercy
+%2 {{killer}} killed {{name}} in a fight.
+%2 A fight broke out. {{name}} didn't get up. {{killer}} was standing over them.
 => END
 
 # infected_by_fight: {{name}} (the killer) caught it from {{from}} (the sick victim).
 ~ infected_by_fight
-{{name}} got {{from}}'s blood on their hands. Now they're sick too.
+% {{name}} got {{from}}'s blood on their hands. Now they're sick too.
+% 
+	{{from}}'s blood had a yellow tint to it
+	The next day, {{name}} was coughing up blood with the same hue
 => END
 
 # infected_bystander: {{from}} was a sick superspreader killed in a fight; {{name}} caught it too.
 ~ infected_bystander
-{{name}} was there when {{from}} fell. Now they're sick too.
+% {{name}} was there when {{from}} fell. Now they're sick too.
+% 
+	{{name}} had to clean up the blood from {{from}}'s body
+	They woke up the next day with fever
 => END
 
 ~ ration_needed
@@ -215,6 +259,9 @@ There is not enough food to feed everyone. {{count}} resident(s) must go without
 ~ bed_built
 % {{name}} spent the night hammering and sawing. The farm now has an extra bed!
 % Working through the night, {{name}} managed to construct a new bed using the scavenged materials.
+%
+	The sound of hammer to nail has kept some of the resident up tonight
+	{{name}} stayed up building a bed for a potential visitor
 => END
 
 ~ starved
@@ -237,4 +284,9 @@ There is not enough food to feed everyone. {{count}} resident(s) must go without
 ~ tattle_fight
 % {{accuser}} insists {{accused}} started the fight.
 % {{accuser}} says it was all {{accused}}'s doing.
+%
+	{{accuser}} asked you to have a conversation
+	distraught, they told you about {{accused}}'s recent pattern in behavior
+	"It feels like we have to walk on eggshells around {{accused}}"
+	"Their violence tendencies have gotten out of hand"
 => END

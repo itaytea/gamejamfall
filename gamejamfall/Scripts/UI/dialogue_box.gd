@@ -9,10 +9,11 @@ extends Control
 
 signal _advanced
 
-@export var text_label: Label
+@export var text_label: RichTextLabel
 @export var name_label: Label            ## Optional: leave empty if the speaker's name is shown elsewhere
 @export var hide_when_idle := false      ## Hide this node between conversations
 @export var characters_per_second := 40.0
+@export var wave := true                 ## Letters gently bob up and down (WaveTextEffect)
 
 var is_playing := false
 var is_typing := false
@@ -20,6 +21,8 @@ var _shown := 0.0   # Characters revealed so far (fractional, so speed is frame-
 
 
 func _ready() -> void:
+	text_label.bbcode_enabled = true
+	text_label.install_effect(WaveTextEffect.new())
 	if hide_when_idle:
 		hide()
 
@@ -51,7 +54,8 @@ func advance() -> void:
 
 
 func _start_typing(text: String) -> void:
-	text_label.text = text
+	text = text.replace("[", "[lb]")       # Show any [ in the line as-is, not as a tag
+	text_label.text = "[bob]%s[/bob]" % text if wave else text
 	text_label.visible_characters = 0
 	_shown = 0.0
 	is_typing = true

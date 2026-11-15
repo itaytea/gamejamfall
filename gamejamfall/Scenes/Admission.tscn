@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bpc41mq3nbaa5" path="res://Sprites/base_name_textbox.png" id="5_textbox"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/NpcPortrait.tscn" id="6_portrait"]
 [ext_resource type="Shader" path="res://Shaders/tree_sway.gdshader" id="9_treesway"]
+[ext_resource type="Texture2D" uid="uid://br8khdsr50y6o" path="res://Sprites/info_folder.png" id="10_folder"]
 
 [sub_resource type="ShaderMaterial" id="sway_back"]
 shader = ExtResource("9_treesway")
@@ -96,24 +97,33 @@ texture = ExtResource("4_csang")
 self_modulate = Color(1, 1, 1, 0.5)
 layout_mode = 0
 offset_left = 7.0
-offset_top = 49.0
+offset_top = 24.0
 offset_right = 45.0
-offset_bottom = 87.0
+offset_bottom = 82.0
 texture = ExtResource("5_textbox")
 patch_margin_left = 6
 patch_margin_top = 6
 patch_margin_right = 6
 patch_margin_bottom = 6
 
+[node name="Day" type="Label" parent="StatsBox"]
+layout_mode = 0
+offset_top = 2.0
+offset_right = 38.0
+offset_bottom = 17.0
+theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 16
+text = "Day 1"
+horizontal_alignment = 1
+
 [node name="Stats" type="Label" parent="StatsBox" unique_id=676577044]
 layout_mode = 0
-offset_left = 4.0
-offset_top = 2.0
-offset_right = 36.0
-offset_bottom = 37.0
+offset_top = 17.0
+offset_right = 38.0
+offset_bottom = 57.0
 theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
-theme_override_constants/line_spacing = -2
 theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
 
 [node name="Visitor" parent="." unique_id=1628881973 instance=ExtResource("6_portrait")]
 layout_mode = 0
@@ -121,6 +131,15 @@ offset_left = 43.0
 offset_top = 25.0
 offset_right = 133.0
 offset_bottom = 135.0
+
+[node name="Folder" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 84.0
+offset_right = 46.0
+offset_bottom = 124.0
+focus_mode = 0
+texture_normal = ExtResource("10_folder")
 
 [node name="InfoBox" type="NinePatchRect" parent="." unique_id=1985363831]
 self_modulate = Color(1, 1, 1, 0.5)
@@ -162,12 +181,17 @@ mouse_filter = 2
 script = ExtResource("2_box")
 text_label = NodePath("Text")
 
-[node name="Text" type="Label" parent="InfoBox/DialogueBox" unique_id=1686258455]
+[node name="Text" type="RichTextLabel" parent="InfoBox/DialogueBox" unique_id=1686258455]
 layout_mode = 0
+clip_contents = false
 offset_right = 88.0
 offset_bottom = 40.0
-theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
-theme_override_font_sizes/font_size = 8
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.14, 0.12, 0.12, 1)
+theme_override_constants/line_separation = 3
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+scroll_active = false
 autowrap_mode = 3
 
 [node name="Buttons" type="HBoxContainer" parent="InfoBox" unique_id=1321235190]
@@ -228,3 +252,38 @@ theme_override_styles/hover = SubResource("btn_hover")
 theme_override_styles/disabled = SubResource("btn_disabled")
 theme_override_styles/focus = SubResource("btn_focus")
 text = "DENY"
+
+[node name="Roster" type="NinePatchRect" parent="."]
+visible = false
+self_modulate = Color(1, 1, 1, 0.95)
+layout_mode = 0
+offset_left = 50.0
+offset_top = 8.0
+offset_right = 232.0
+offset_bottom = 60.0
+mouse_filter = 2
+texture = ExtResource("5_textbox")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Title" type="Label" parent="Roster"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 3.0
+offset_right = 174.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(0.14, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 16
+text = "RESIDENTS"
+horizontal_alignment = 1
+
+[node name="List" type="VBoxContainer" parent="Roster"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 18.0
+offset_right = 174.0
+offset_bottom = 44.0
+mouse_filter = 2
+theme_override_constants/separation = 2

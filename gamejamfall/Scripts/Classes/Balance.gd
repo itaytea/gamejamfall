@@ -15,14 +15,22 @@ const DIALOGUE_SET_WEIGHTS := [
 	1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,  # v6-v14
 	0.5,                                          # v15 picket fence
 	0.25,                                         # v16 neighbor
+	0.25,                                         # v17 rare (0.25): silent
+	1.0,                                          # v18 yoohoo
+	1.0,                                          # v19 hey <3
+	1.0,                                          # v20 TREBLE TROUBLE
+	0.01,                                         # v21 ultra rare (0.01): two dads
+	1.0,                                          # v22 survivor
 ]
 
 #
 const FORAGE_DAYS := 2
 const GARDEN_YIELD := 3
 const POOR_HARVEST_YIELD := 2
-const FORAGE_MIN := 3
+const FORAGE_MIN := 3                         # meals a forager brings back
 const FORAGE_MAX := 4
+const FORAGE_MATERIALS_MIN := 1               # materials found on top of the meals
+const FORAGE_MATERIALS_MAX := 2
 const GARDEN_PLOTS := 2                      # C: only this many gardeners produce food; extras do nothing
 const ROAD_INFECT_CHANCE := 0.2             # foragers can catch it on the road (the player isn't told)
 const FORAGE_DEATH_CHANCE := 0.25            # B: chance a forager dies on the road (they never come back)
@@ -42,7 +50,7 @@ const MEALS_PER_PERSON := 1
 const VISITORS_MIN := 1
 const VISITORS_MAX := 2
 const INFECT_CHANCE_CAP := 0.9
-const EVENT_CHANCE := 0.3
+const EVENT_CHANCE := 0.15                   # chance of a random event (poor harvest) each night
 
 #cure
 const RESEARCH_MIN := 5.0                    # research % gained per researcher per night (random in this range)

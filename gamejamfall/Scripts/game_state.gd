@@ -43,6 +43,7 @@ var ration_short := 0                 # How many residents can't be fed tonight
 
 var _skip_admission := false          # Set when nobody guarded last night
 var _garden_yield_override := -1      # Set by events; -1 = normal yield
+var _opening_night := false           # The run's first night: no random event, no thefts or fights
 var max_residents: int = 5
 
 # ================================================================
@@ -73,7 +74,14 @@ func start_new_run() -> void:
 	
 	residents_changed.emit()
 	day_advanced.emit(day)
-	_set_stage(Stage.COMMAND)
+	
+	# The run opens on night 1's report, as if one resident guarded and one gardened.
+	# The opening night is quiet: no random event, no thefts or fights.
+	residents[0].task = Resident.Task.GUARD
+	residents[1].task = Resident.Task.GARDENER
+	_opening_night = true
+	_resolve_night()
+	_set_stage(Stage.CONSEQUENCES)
 
 
 # ================================================================
@@ -236,7 +244,10 @@ func _resolve_night() -> void:
 			r.depart()
 			
 	# 1. Random event (may modify the steps below)
-	_roll_event()
+	if _opening_night:
+		_garden_yield_override = -1
+	else:
+		_roll_event()
 	
 	# 2. Gardens, as one combined event. Only GARDEN_PLOTS gardeners produce (C).
 	var yield_per := _garden_yield_override if _garden_yield_override >= 0 else Balance.GARDEN_YIELD
@@ -280,9 +291,9 @@ func _resolve_night() -> void:
 				r.return_home()
 				_event("lab_returned", {"name": r.name})
 			else:
-				var total_items := randi_range(Balance.FORAGE_MIN, Balance.FORAGE_MAX)
-				var new_meals = randi_range(1, total_items - 1)
-				var new_materials = total_items - new_meals
+				# Food and materials are found separately, so foraging always pays in food
+				var new_meals := randi_range(Balance.FORAGE_MIN, Balance.FORAGE_MAX)
+				var new_materials := randi_range(Balance.FORAGE_MATERIALS_MIN, Balance.FORAGE_MATERIALS_MAX)
 				meals += new_meals
 				materials += new_materials
 				r.return_home()
@@ -290,9 +301,11 @@ func _resolve_night() -> void:
 
 	# 3b. Hidden attributes: greedy residents take food, belligerent ones start fights,
 	#     and sometimes someone points a finger (truthfully or not)
-	var thieves := _greedy_night()
-	var brawlers := _fight_night()
-	_tattle_night(thieves, brawlers)
+	if not _opening_night:
+		var thieves := _greedy_night()
+		var brawlers := _fight_night()
+		_tattle_night(thieves, brawlers)
+	_opening_night = false
 	
 	# 4. Eating. The player eats first. If what's left can't feed every resident,
 	#    pause here: the night report asks the player who goes without, then calls
